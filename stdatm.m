@@ -1,4 +1,4 @@
-function RETURNCOLUM = stdatm( HeightToSealevel )
+function SATD = stdatm( HeightToSealevel )
 % STDATM
 %     stdatm( HeightToSealevel ). Just give the height that you want to
 %     know in the row vector. this function will return the atmosphere datas
@@ -46,5 +46,3 @@ SATD( :, 4 ) = ( SATD( :, 2 ) * M ) / ( R * L );
 SATD( :, 5 ) = P0 .* ( 1 - ( L .* SATD( :, 1 ) ) ./ T0   ).^SATD( :, 4 );
 SATD( :, 6 ) = ( SATD( :, 5 ) .* M ) ./ ( R .* SATD( :, 3 ) ) ;
 
-% 
-RETURNCOLUM = SATD;
