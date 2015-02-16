@@ -18,9 +18,9 @@ global AirDensity Power Gravity TotalMass Weight RotorNumber RotorRadious Sref1 
 
 if nargin == 2
     Vc0 = 0;
-    Vc1 = 10;
+    Vc1 = 20;
 elseif nargin == 3
-    Vc1 = 10;
+    Vc1 = 20;
 end    
     
 
@@ -28,17 +28,22 @@ end
 RoterArea = pi * RotorRadious^2;
 V1h = sqrt( Weight / ( 2 * AirDensity * RotorNumber * RoterArea ) );
 
-%
+
+% Declare the climb velocity form Vc0 to Vc1, using linspce to divid into
+% 1000 steps. And the V1c, induced velocity in vertical climb, is derived 
+% form momentum method. You may check the paper formar from my thesis.
 Vc = linspace( Vc0, Vc1, 1000 );
 V1c = ( -0.5 .* Vc ) + sqrt( ( 0.5 .* Vc ).^2 + V1h^2 );
 
-%
+% Declare the thrust required from the forces act on the quadrotor. 
+% The thrust have to elimiate drag, wake drag and weight. 
 ThrustReqC = 0.5 * AirDensity * Sref1 * CD1 .* ( Vc.^2 )...
-           + Weight * ( 1 + Nu  );
+             0.5 * AirDensity * Sref2 * CD2 .* ( ( 2 * V1c ).^2 )...   
+           + Weight;
 
 % Ther process to computing the power required for each term.
 PowerAva = Power * FM .* ones( size( Vc ) );
-PowerPro = ( ThrustReqC .* ( V1c + Vc ) ./ FM );
+PowerPro = ( ThrustReqC .* ( V1c ) ./ FM );
 PowerPra = 0.5 * AirDensity * Sref1 * CD1 .* ( Vc.^3 ) ./ FM;  
 PowerTot = PowerPro + PowerPra;
 PowerExc = PowerAva - PowerTot;
