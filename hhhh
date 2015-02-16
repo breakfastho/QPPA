@@ -1,4 +1,0 @@
-clc
-
-h = linspace( 0, 5000, 20 );
-quadceiling( h );
