@@ -38,12 +38,12 @@ V1c = ( -0.5 .* Vc ) + sqrt( ( 0.5 .* Vc ).^2 + V1h^2 );
 % Declare the thrust required from the forces act on the quadrotor. 
 % The thrust have to elimiate drag, wake drag and weight. 
 ThrustReqC = 0.5 * AirDensity * Sref1 * CD1 .* ( Vc.^2 )...
-             0.5 * AirDensity * Sref2 * CD2 .* ( ( 2 * V1c ).^2 )...   
+           + 0.5 * AirDensity * Sref2 * CD2 .* ( ( 2 * V1c ).^2 )...   
            + Weight;
 
 % Ther process to computing the power required for each term.
 PowerAva = Power * FM .* ones( size( Vc ) );
-PowerPro = ( ThrustReqC .* ( V1c ) ./ FM );
+PowerPro = ( ThrustReqC .* ( V1c + Vc ) ./ FM );
 PowerPra = 0.5 * AirDensity * Sref1 * CD1 .* ( Vc.^3 ) ./ FM;  
 PowerTot = PowerPro + PowerPra;
 PowerExc = PowerAva - PowerTot;

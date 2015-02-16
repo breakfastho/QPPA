@@ -1,10 +1,10 @@
-function T2C = quadceiling( DesirdHeight, GeoHeight )
+function T2C = quadceiling( DesirdHeight, HeightRange )
 % QUADCEILING
 %     quadceiling( GeoHeight ) is a function to figure out the maximun
 %     climb rate at different geometry height. The concept of this function
 %     is base on the thrust avaliable and required. The curve of required
 %     will changed as the height. The main resson is caused by the change
-%     of air density and humidity. 
+%     of air density and humidity.
 
 % AUTHOOR INFORMACTIONS
 %     Date : 14-Feb-2015 00:04:31
@@ -14,30 +14,22 @@ function T2C = quadceiling( DesirdHeight, GeoHeight )
 %     Copyright 2015 by Avionics And Flight Simulation Laboratory
 
 
-global AirDensity Power Gravity TotalMass Weight 
+global Power TotalMass
 global RoterArea RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
 
-% if nargin == 0
-%     DesirdHeight = 1000;
-%     GeoHeight = 5000;
-% elseif nargin == 1
-%     GeoHeight = 5000;
-% end   
+if nargin == 0
+    DesirdHeight = 1000;
+    HeightRange = 5000;
+elseif nargin == 1
+    HeightRange = 5000;
+end
 
-
-Atomdata = stdatm( GeoHeight );
+Atomdata = stdatm( linspace( 0, HeightRange, 100 ) );
+GeoHeight = Atomdata( :, 1 )';
 AirDensity = Atomdata( :, 6 )';
 Gravity = Atomdata( :, 2 )';
-TotalMass = 1.5;
-Weight = Gravity * TotalMass;
-Power = 180;
-RotorNumber = 4;
-RotorRadious = 0.1547;
-RoterArea = pi * RotorRadious^2;
-Sref1 = 46e-3;
-Sref2 = 60e-4;
-CD1 = 0.98;
-CD2 = 0.48;
+Weight = TotalMass .* Gravity;
+RoterArea = pi * ( RotorRadious )^2;
 
 FM = 0.7;
 Nu = 3e-2;
@@ -53,7 +45,7 @@ Vc0 = 0;
 Vc1 = 20;
 Vc = linspace( Vc0, Vc1, 500 );
 
-m = length( AirDensity );
+m = length( GeoHeight );
 n = length( Vc );
 %
 
@@ -82,15 +74,6 @@ for i = 1: 1: m
     [ Amp Loc ] = min( abs( ThrustExc( i, : ) ) );
     ceil( 1, i ) =  Vc( Loc );
     
-    %     figure(1)
-    %     plot( Vc, V1c( i, : ) );
-    %     grid on
-    %     hold on
-    %
-    %     figure(2)
-    %     plot( Vc, ThrustExc( i, : ) );
-    %     grid on
-    %     hold on
 end
 
 figure( 1 );
@@ -105,14 +88,11 @@ grid on
 xlabel( ' Height ' );
 ylabel( ' Time to climb ' );
 
-% T2C = 0;
-% j = 2;
-% WidthHeight = GeoHeight( 1, j ) - GeoHeight( 1, j - 1 )
-% 
-% while( GeoHeight( 1, j  )  DesirdHeight )
-%     Increase = 0.5 * ( 1 / ceil( 1, j ) + 1 / ceil( 1, j - 1  ) ) * WidthHeight
-%     T2C = Increase + T2C;
-%     j = j + 1;
-% end
-%  
-% T2C 
+T2C = 0;
+WidthHeight = GeoHeight( 1, 2 ) - GeoHeight( 1, 1 );
+
+for j = 2: 1: round( DesirdHeight / WidthHeight )
+    Increase = 0.5 * ( 1 / ceil( 1, j ) + 1 / ceil( 1, j - 1  ) ) * WidthHeight;
+    T2C = Increase + T2C;
+    j = j + 1;
+end
