@@ -27,19 +27,38 @@ end
 
 % 
 RoterArea = pi * RotorRadious^2;
+
+% The induced velocity in hoveing, deriving from momemtum method.
 V1h = sqrt( Weight / ( 2 * AirDensity * RotorNumber * RoterArea ) );
 
-%
+% Declare a row data for forward speed. From Vf0 to Vf1, divid into 1000
+% steps. 
 Vf = linspace( Vf0, Vf1, 1000 );
-V1f = sqrt( - ( Vf.^2 / 4 ) + sqrt( ( Vf.^2 / 4 ).^2 + V1h^4 ) );
 
-% 
+% The function quadpitch( Vf ) is a function to figure out the pitch
+% angle of the quadrotor. Notice that, just for steady flight. The
+% definition for steady flight is mean thoese forces act on quadrotor is
+% elimiated by each other which at same axis.
 theta = quadpitch( Vf );
 
+% Here have three methods to figure out the induced velocity at propeller,
+% first method is based on my theory, but it still need be approved by my
+% thesis advisor. The second is to calculate the induced veloctity on
+% helicopter. The equation is exact solution. The third is an approximation
+% solution.
+method = 1;
+if method == 1
+    V1f = ( -0.5 .* Vf .* sin( theta ) ) + sqrt( ( 0.5 .* Vf .* sin( theta ) ).^2 + V1h^2 );   
+elseif method == 2
+    V1f = sqrt( - ( Vf.^2 / 4 ) + sqrt( ( Vf.^2 / 4 ).^2 + V1h^4 ) );
+elseif method == 3
+    V1f = ( V1h^2 ) ./ Vf;
+end
+% 
+
 %
-ThrustReqF = 0.5 * AirDensity .* ( ( 2 .* V1f ).^2 ) .* CD2 * Sref2...
-           + 0.5* AirDensity .* Vf.^2 .* CD1 * Sref1 .* cos( theta ) .* sin(theta)...
-           + Weight .* cos( theta ) ;
+DragParasi = 0.5* AirDensity .* Vf.^2 .* CD1 * Sref1 .* cos( theta ) .* sin(theta)
+ThrustReqF = DragParasi + ( 1 + Nu ) * Weight .* cos( theta ) ;
        
 
 % Ther process to computing the power required for each term.
