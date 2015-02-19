@@ -12,21 +12,13 @@ clc
 quadparameters( 1000 );
 time2climb = quadceiling( 1000, 10000 )
 
-pause
-
-BatNumber = 2;
-BatCapity = 5.2;
-BatVoltag = 3.1 * 4;
-
 FM = 0.7;
 Nu = 3e-2;
-Vc0 = 0;
-Vc1 = 20;
 
 [ OPTRC, PORRC, EXCRC, MAXRC ] = verticalflight( FM, Nu );
 [ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu );
 
-endurance = quadendurance( PORFW, BatNumber, BatCapity) 
+endurance = quadendurance( PORFW) 
 range = quadrange( OPTFW, endurance )
 
 

@@ -24,6 +24,7 @@ function output = quadparameters( GeoHeight )
 
 
 global AirDensity Power Gravity TotalMass Weight RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
+global BatNumber BatCapity BatVoltag
 
 Atomdata = stdatm( GeoHeight );  
 AirDensity = Atomdata( :, 6 );
@@ -34,7 +35,10 @@ Power = 280;
 RotorNumber = 4;
 RotorRadious = 0.1547;
 Sref1 = 46e-3;
-Sref2 = 60e-4;
+Sref2 = Sref1 - 60e-4;
 CD1 = 0.98;
 CD2 = 0.48;
 
+BatNumber = 2;
+BatCapity = 5.2;
+BatVoltag = 3.1 * 4;
