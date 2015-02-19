@@ -43,7 +43,7 @@ ThrustReqC = DragParasi + Weight * ( 1 + Nu );
 % Ther process to computing the power required for each term.
 PowerAva = Power * FM .* ones( size( Vc ) );
 PowerPro = ( ThrustReqC .* ( V1c + Vc ) ./ FM );
-PowerPra = DragParasi .* Vc;
+PowerPra = DragParasi * Vc;
 PowerTot = PowerPro + PowerPra;
 PowerExc = PowerAva - PowerTot;
 

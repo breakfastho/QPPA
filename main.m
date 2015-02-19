@@ -9,7 +9,7 @@ clc
 %     Version : 2.0
 %     Copyright 2015 by Avionics And Flight Simulation Laboratory
 
-quadparameters( 1000 );
+quadparameters( 0 );
 time2climb = quadceiling( 1000, 10000 )
 
 FM = 0.7;
