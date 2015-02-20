@@ -1,4 +1,4 @@
-function [ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu, Vf0, Vf1 )
+function [ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu, Methods, Vf0, Vf1 )
 % FORWARDFLIGHT
 %     forwardflight( FM, Nu, Vc0, Vc1 ) is a co-function with
 %     QUADAnalyser. The main propose of this function is to fugure out the
@@ -19,9 +19,11 @@ global AirDensity Power Gravity TotalMass Weight RotorNumber RotorRadious Sref1 
 
 if nargin == 2
     Vf0 = 0;
-    Vf1 = 18;
+    Vf1 = 20;
+    Methods = 1;
 elseif nargin == 3
-    Vf1 = 18;
+    Vf0 = 1;
+    Vf1 = 10;
 end    
     
 
@@ -46,12 +48,11 @@ theta = quadpitch( Vf );
 % thesis advisor. The second is to calculate the induced veloctity on
 % helicopter. The equation is exact solution. The third is an approximation
 % solution.
-method = 1;
-if method == 1
+if Methods == 1
     V1f = ( -0.5 .* Vf .* sin( theta ) ) + sqrt( ( 0.5 .* Vf .* sin( theta ) ).^2 + V1h^2 );   
-elseif method == 2
+elseif Methods == 2
     V1f = sqrt( - ( Vf.^2 / 4 ) + sqrt( ( Vf.^2 / 4 ).^2 + V1h^4 ) );
-elseif method == 3
+elseif Methods == 3
     V1f = ( V1h^2 ) ./ Vf;
 end
 % 
