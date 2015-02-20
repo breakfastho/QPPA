@@ -22,12 +22,10 @@ if nargin == 2
     Methods = 1;
     ProMethod = 1;
 elseif nargin == 3
-    Vf0 = 0;
+    Vf0 = 1;
     Vf1 = 10;
     ProMethod = 1;
-elseif nargin == 4
-    Vf0 = 0;
-    Vf1 = 20;
+    else
 end    
     
 
@@ -76,8 +74,8 @@ PowerAva = Power * FM .* ones( size( Vf ) );
 if ProMethod == 1 
     PowerPro = ( ThrustReqF .* ( V1f + Vf .* sin( theta ) ) ./ FM ) ./ ( 1 - Nu );
 elseif ProMethod == 2
-    PowerPro = ( ThrustReqF .* ( V1f + Vf ) ./ FM ) ./ ( 1 - Nu );
-elseif ProMethod == 3
+    PowerPro = ( ThrustReqF .* ( V1f + Vf  ) ./ FM ) ./ ( 1 - Nu );
+else
     PowerPro = ( ThrustReqF .* V1f ./ FM ) ./ ( 1 - Nu );
 end
 PowerPra = 0.5 * AirDensity * Sref1 * CD1 .* cos( theta ) .*  Vf.^3  ;  

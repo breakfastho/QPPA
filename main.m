@@ -13,13 +13,10 @@ quadparameters( 0 );
 time2climb = quadceiling( 1000, 10000 )
 
 FM = 0.7;
-Nu = 3e-2;
+Nu = 5e-2;
 
 [ OPTRC, PORRC, EXCRC, MAXRC ] = verticalflight( FM, Nu );
-[ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu );
+[ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu, 2, 3, 0, 45 );
 
-endurance = quadendurance( PORFW) 
+endurance = quadendurance( PORFW ) 
 range = quadrange( OPTFW, endurance )
-
-
-

@@ -33,7 +33,8 @@ V1h = sqrt( Weight / ( 2 * AirDensity * RotorNumber * RoterArea ) );
 % 1000 steps. And the V1c, induced velocity in vertical climb, is derived 
 % form momentum method. You may check the paper formar from my thesis.
 Vc = linspace( Vc0, Vc1, 1000 );
-V1c = ( -0.5 .* Vc ) + sqrt( ( 0.5 .* Vc ).^2 + V1h^2 );
+V1c = ( 0.25 .* Vc ) + sqrt( ( 0.25 .* Vc ).^2 + V1h^2 )
+%V1c = ( -0.5 .* Vc ) + sqrt( ( 0.5 .* Vc ).^2 + V1h^2 );
 
 % Declare the thrust required from the forces act on the quadrotor. 
 % The thrust have to elimiate drag, wake drag and weight. 
