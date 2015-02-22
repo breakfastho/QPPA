@@ -73,14 +73,17 @@ ThrustReqF = DragParasi + ( 1 + Nu ) * Weight .* cos( theta ) ;
 % drag. Thus, the total power is the summation of propeller and parasite
 % power. Notice that, the power avaliable will be a constant. 
 PowerAva = Power * FM .* ones( size( Vf ) );
+
+% Here are algorithms with different view.
 if ProMethod == 1 
-    PowerPro = ( ThrustReqF .* ( V1f + Vf .* sin( theta ) ) ./ FM ) ./ ( 1 - Nu );
+    PowerPro = ( ThrustReqF .* ( V1f + Vf .* sin( theta ) ) ./ FM );
 elseif ProMethod == 2
-    PowerPro = ( ThrustReqF .* ( V1f + Vf ) ./ FM ) ./ ( 1 - Nu );
+    PowerPro = ( ThrustReqF .* ( V1f + Vf ) ./ FM );
 elseif ProMethod == 3
-    PowerPro = ( ThrustReqF .* V1f ./ FM ) ./ ( 1 - Nu );
+    PowerPro = ( ThrustReqF .* V1f ./ FM );
 end
-PowerPra = 0.5 * AirDensity * Sref1 * CD1 .* cos( theta ) .*  Vf.^3  ;  
+PowerPra = 0.5 * AirDensity * Sref1 * CD1 .*  Vf.^3  ; 
+%PowerPra = 0.5 * AirDensity * Sref1 * CD1 .* cos( theta ) .*  Vf.^3  ;  
 PowerTot = PowerPro + PowerPra;
 PowerExc = PowerAva - PowerTot;
 
@@ -93,7 +96,8 @@ PORFW = PowerAmp;
 MAXFW = Vf( MaxrcLoc );
 EXCFW = max( PowerExc )
 
-figure( 3 );
+figure( 6 );
+subplot( 1, 2, 1 );
 h3 = plot( Vf, PowerPra, '--g', Vf, PowerPro, '--b' , Vf, PowerTot, 'r', Vf, PowerAva, 'm');
 title( ' Power Required in Forward Flight' );
 legend( 'Parasite', 'Propeller', 'Required', 'Avaliable')
@@ -102,7 +106,7 @@ xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
 
-figure( 4 );
+subplot( 1, 2, 2 );
 h4 = plot( Vf, PowerExc );
 title( ' Excess Power in Forward Flight' );
 legend( 'Excess' )

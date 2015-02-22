@@ -34,8 +34,7 @@ V1h = sqrt( Weight / ( 2 * AirDensity * RotorNumber * RoterArea ) );
 % 1000 steps. And the V1c, induced velocity in vertical climb, is derived 
 % form momentum method. You may check the paper formar from my thesis.
 Vc = linspace( Vc0, Vc1, 1000 );
-V1c = ( 0.25 .* Vc ) + sqrt( ( 0.25 .* Vc ).^2 + V1h^2 );
-%V1c = ( -0.5 .* Vc ) + sqrt( ( 0.5 .* Vc ).^2 + V1h^2 );
+V1c = ( -0.5 .* Vc ) + sqrt( ( 0.5 .* Vc ).^2 + V1h^2 );
 
 % Declare the thrust required from the forces act on the quadrotor. 
 % The thrust have to elimiate drag, wake drag and weight. \
@@ -67,7 +66,7 @@ PORRC = PowerAmp;
 MAXRC = Vc( MaxrcLoc );
 EXCRC = max( PowerExc );
 
-figure( 1 );
+figure( 3 );
 h = plot( Vc, PowerPra, '--g', Vc, PowerPro, '--b' , Vc, PowerTot, 'r', Vc, PowerAva, 'm');
 title( ' Power Required in Vertical Flight' );
 legend( 'Parasite', 'Propeller', 'Required', 'Avaliable')
@@ -76,7 +75,7 @@ xlabel( ' Vertical Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
 
-figure( 2 );
+figure( 4 );
 h2 = plot( Vc, PowerExc );
 title( ' Excess Power in Vertical Flight' );
 legend( ' Excess ' );
