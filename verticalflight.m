@@ -1,6 +1,6 @@
-function [ OPTRC, PORRC, EXCRC, MAXRC ] = verticalflight( FM, Nu, Vc0, Vc1 )
+function [ OPTRC, PORRC, EXCRC, MAXRC ] = verticalflight( FM, Nu, ModeThrustC ,Vc0, Vc1 )
 % VERTICALFLIGHT
-%     verticalflight( FM, Nu, Vc0, Vc1 ) is a co-function with
+%     verticalflight( FM, Nu, ModeThrustC ,Vc0, Vc1 ) is a co-function with
 %     QUADAnalyser. The main propose of this function is to fugure out the
 %     minimum power, minimun power required R/C and maximun R/C in the
 %     specified condition. In this functtion, you have to input the 
@@ -17,13 +17,14 @@ function [ OPTRC, PORRC, EXCRC, MAXRC ] = verticalflight( FM, Nu, Vc0, Vc1 )
 global AirDensity Power Gravity TotalMass Weight RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
 
 if nargin == 2
+    ModeThrustC = 1;
     Vc0 = 0;
-    Vc1 = 10;
+    Vc1 = 12;
 elseif nargin == 3
-    Vc1 = 10;
+    Vc0 = 0
+    Vc1 = 12;
 end    
     
-
 % 
 RoterArea = pi * RotorRadious^2;
 V1h = sqrt( Weight / ( 2 * AirDensity * RotorNumber * RoterArea ) );
@@ -33,13 +34,19 @@ V1h = sqrt( Weight / ( 2 * AirDensity * RotorNumber * RoterArea ) );
 % 1000 steps. And the V1c, induced velocity in vertical climb, is derived 
 % form momentum method. You may check the paper formar from my thesis.
 Vc = linspace( Vc0, Vc1, 1000 );
-V1c = ( 0.25 .* Vc ) + sqrt( ( 0.25 .* Vc ).^2 + V1h^2 )
+V1c = ( 0.25 .* Vc ) + sqrt( ( 0.25 .* Vc ).^2 + V1h^2 );
 %V1c = ( -0.5 .* Vc ) + sqrt( ( 0.5 .* Vc ).^2 + V1h^2 );
 
 % Declare the thrust required from the forces act on the quadrotor. 
-% The thrust have to elimiate drag, wake drag and weight. 
+% The thrust have to elimiate drag, wake drag and weight. \
 DragParasi = 0.5 * AirDensity * Sref1 * CD1 .* ( Vc.^2 );
-ThrustReqC = DragParasi + Weight * ( 1 + Nu );
+DragParasi2 = 0.5 * AirDensity * Sref2 * CD2 .* ( ( 2 .* V1c ).^2 );
+
+if ModeThrustC == 1
+    ThrustReqC = DragParasi + Weight * ( 1 + Nu );
+elseif ModeThrustC == 2
+    ThrustReqC = DragParasi + DragParasi2 + Weight;
+end
 
 % Ther process to computing the power required for each term.
 PowerAva = Power * FM .* ones( size( Vc ) );

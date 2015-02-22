@@ -7,7 +7,7 @@ clc
 %      Author : Wei-Chieh Chang
 %   Education : M.Sc. of Aerospace Engineering, Tamkang University
 %     Version : 2.0
-
+%     Copyright 2015 by Avionics And Flight Simulation Laboratory
 
 quadparameters( 0 );
 time2climb = quadceiling( 1000, 10000 )
@@ -15,7 +15,7 @@ time2climb = quadceiling( 1000, 10000 )
 FM = 0.7;
 Nu = 5e-2;
 
-[ OPTRC, PORRC, EXCRC, MAXRC ] = verticalflight( FM, Nu, 1, 0, 15 );
+[ OPTRC, PORRC, EXCRC, MAXRC ] = verticalflight( FM, Nu );
 [ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu, 2, 3, 0, 45 );
 
 endurance = quadendurance( PORFW ) 
