@@ -14,26 +14,23 @@ function [ OPTRC, PORRC, EXCRC, MAXRC ] = verticalflight( FM, Nu, ModeThrustC ,V
 %     Copyright 2015 by Avionics And Flight Simulation Laboratory
 
 
-global AirDensity Power Gravity TotalMass Weight RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
-global FigureCounter
+global AirDensity Power Gravity TotalMass Weight 
+global RoterArea RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
 
-if nargin == 2
-    ModeThrustC = 1;
-    Vc0 = 0;
-    Vc1 = 12;
-elseif nargin == 3
-    Vc0 = 0
-    Vc1 = 12;
-end    
-    
-% 
-RoterArea = pi * RotorRadious^2;
+% The induced velocity in hovering.
 V1h = sqrt( Weight / ( 2 * AirDensity * RotorNumber * RoterArea ) );
-
 
 % Declare the climb velocity form Vc0 to Vc1, using linspce to divid into
 % 1000 steps. And the V1c, induced velocity in vertical climb, is derived 
 % form momentum method. You may check the paper formar from my thesis.
+if nargin == 2
+    ModeThrustC = 1;
+    Vc0 = 0;
+    Vc1 = 15;
+elseif nargin == 3
+    Vc0 = 0
+    Vc1 = 15;
+end  
 Vc = linspace( Vc0, Vc1, 1000 );
 V1c = ( -0.5 .* Vc ) + sqrt( ( 0.5 .* Vc ).^2 + V1h^2 );
 
@@ -44,9 +41,9 @@ DragParasi2 = 0.5 * AirDensity * Sref2 * CD2 .* ( ( 2 .* V1c ).^2 );
 
 % Choise the compute algorithm for the thrust required.
 if ModeThrustC == 1
-    ThrustReqC = DragParasi + Weight * ( 1 + Nu );
-elseif ModeThrustC == 2
     ThrustReqC = DragParasi + DragParasi2 + Weight;
+elseif ModeThrustC == 2
+    ThrustReqC = DragParasi + Weight * ( 1 + Nu );  
 end
 
 % Ther process to computing the power required for each term.
@@ -73,7 +70,6 @@ EXCRC = max( PowerExc );
 
 % Plot the figure
 figure( 3 );
-subplot( 1, 2, 1 )
 h = plot( Vc, PowerPra, '--g', Vc, PowerPro, '--b' , Vc, PowerTot, 'r', Vc, PowerAva, 'm');
 title( ' Power Required in Vertical Flight' );
 legend( 'Parasite', 'Propeller', 'Required', 'Avaliable')
@@ -82,7 +78,7 @@ xlabel( ' Vertical Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
 
-subplot( 1, 2, 2 );
+figure( 4 )
 h2 = plot( Vc, PowerExc );
 title( ' Excess Power in Vertical Flight' );
 legend( ' Excess ' );
@@ -91,15 +87,16 @@ xlabel( ' Vertical Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
 
-figure( 4 );
-h5 = plot( Vc, ThrustReqC, Vc, ThrustAva );
+figure( 5 );
+h5 = plot( Vc, ThrustReqC, Vc, ThrustAva, Vc, DragParasi, '-.m',...
+    Vc, Weight .* ones( size( Vc ) ), '-.g' );
 title( ' Thrust Required and Avaliable ' );
 xlabel( ' Vertical Speed (m/s) ' );
-ylabel( ' Thrust Required (W) ' );
-legend( ' Required ', ' Avaliable ' );
+ylabel( ' Thrust Required (N) ' );
+legend( ' Required ', ' Avaliable ', 'Parasite Drag', ' Weight ' );
 grid on;
 
-{[ ' Opt. R/C = ' num2str( round( OPTRC ) ) ' m/s ' ];
+{[ ' Opt. R/C = ' num2str( OPTRC ) ' m/s ' ];
  [ 'Min. P.R = ' num2str( round( PORRC ) ) ' W   ' ];
  [ 'Max. R/C = ' num2str( round( MAXRC ) ) ' m/s ' ]}
 

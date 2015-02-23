@@ -23,18 +23,25 @@ function output = quadparameters( GeoHeight )
 %            CD2 : Drag coefficient of Sref2
 
 
-global AirDensity Power Gravity TotalMass Weight RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
+global AirDensity Power Gravity TotalMass Weight 
+global RoterArea RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
 global BatNumber BatCapity BatVoltag
-global FigureCounter
+
 
 Atomdata = stdatm( GeoHeight );  
 AirDensity = Atomdata( :, 6 );
 Gravity = Atomdata( :, 2 );
+
 TotalMass = 1.5;
 Weight = Gravity .* TotalMass;
-Power = 280;
+Power = 180;
+
+% The properties for propeller.
 RotorNumber = 4;
 RotorRadious = 0.1547;
+RoterArea = pi * RotorRadious^2;
+
+
 Sref1 = 46e-3;
 Sref2 = Sref1 - 60e-4;
 CD1 = 0.98;

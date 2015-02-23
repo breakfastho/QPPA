@@ -14,7 +14,8 @@ function [ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu, Methods, ProMet
 %     Copyright 2015 by Avionics And Flight Simulation Laboratory
 
 
-global AirDensity Power Gravity TotalMass Weight RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
+global AirDensity Power Gravity TotalMass Weight 
+global RoterArea RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
 
 if nargin == 2
     Vf0 = 0;
@@ -55,7 +56,7 @@ theta = quadpitch( Vf );
 if Methods == 1
     V1f = ( -0.5 .* Vf .* sin( theta ) ) + sqrt( ( 0.5 .* Vf .* sin( theta ) ).^2 + V1h^2 );   
 elseif Methods == 2
-    V1f = sqrt( - ( Vf.^2 / 4 ) + sqrt( ( Vf.^2 / 4 ).^2 + V1h^4 ) );
+    V1f = sqrt( - ( Vf.^2 / 2 ) + sqrt( ( Vf.^2 / 2 ).^2 + V1h^4 ) );
 elseif Methods == 3
     V1f = ( V1h^2 ) ./ Vf;
 end
@@ -64,7 +65,7 @@ end
 % propeller. The equation is derived from the force diagram. The Parasite
 % drag is base on standard drag equation.
 DragParasi = 0.5 * AirDensity .* ( Vf.^2 ) .* CD1 * Sref1 .* cos( theta ) .* sin(theta);
-ThrustReqF = DragParasi + ( 1 + Nu ) * Weight .* cos( theta ) ;
+ThrustReqF = DragParasi + ( 1 + Nu ) * Weight ./ cos( theta ) ;
        
 % Ther process to computing the power required for each term. The power
 % avaliable is derived from the momentum method. With the forward speed 
@@ -72,7 +73,7 @@ ThrustReqF = DragParasi + ( 1 + Nu ) * Weight .* cos( theta ) ;
 % power which dispat at propeller, the parasite is the power to elimiate the 
 % drag. Thus, the total power is the summation of propeller and parasite
 % power. Notice that, the power avaliable will be a constant. 
-PowerAva = Power * FM .* ones( size( Vf ) );
+PowerAva = Power * ones( size( Vf ) );
 
 % Here are algorithms with different view.
 if ProMethod == 1 
@@ -82,8 +83,10 @@ elseif ProMethod == 2
 elseif ProMethod == 3
     PowerPro = ( ThrustReqF .* V1f ./ FM );
 end
-PowerPra = 0.5 * AirDensity * Sref1 * CD1 .*  Vf.^3  ; 
-%PowerPra = 0.5 * AirDensity * Sref1 * CD1 .* cos( theta ) .*  Vf.^3  ;  
+
+% The process to figure out parasite power, propeller power
+%PowerPra = 0.5 * AirDensity * Sref1 * CD1 .*  Vf.^3  ; 
+PowerPra = 0.5 * AirDensity * Sref1 * CD1 .* cos( theta ) .*  Vf.^3  ;  
 PowerTot = PowerPro + PowerPra;
 PowerExc = PowerAva - PowerTot;
 
@@ -97,7 +100,6 @@ MAXFW = Vf( MaxrcLoc );
 EXCFW = max( PowerExc )
 
 figure( 6 );
-subplot( 1, 2, 1 );
 h3 = plot( Vf, PowerPra, '--g', Vf, PowerPro, '--b' , Vf, PowerTot, 'r', Vf, PowerAva, 'm');
 title( ' Power Required in Forward Flight' );
 legend( 'Parasite', 'Propeller', 'Required', 'Avaliable')
@@ -106,7 +108,7 @@ xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
 
-subplot( 1, 2, 2 );
+figure( 7 );
 h4 = plot( Vf, PowerExc );
 title( ' Excess Power in Forward Flight' );
 legend( 'Excess' )
@@ -114,6 +116,13 @@ set( h4, 'linewidth', 1.5 );
 xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
+
+figure( 8 )
+plot( Vf, rad2deg( theta ) );
+title( ' Pitch Angle in Forward Flight  ' );
+xlabel( ' Forwrad Speed (m/s) ' );
+ylabel( ' Pitch Angle (Deg.) ' );
+grid on
 
 {[ 'Opt. FW = ' num2str( round( OPTFW ) ) ' m/s ' ];
  [ 'Min. P.R = ' num2str( round( PORFW ) ) ' W   ' ];
