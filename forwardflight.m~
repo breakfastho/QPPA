@@ -99,20 +99,19 @@ PowerExc = PowerAva - PowerTot;
 [ PowerAmp PowerLoc ] = min( PowerTot );
 
 % Seek the valus and address for excess power. 
-[ MaxrcAmp MaxrcLoc ] = max( PowerExc );
+[ MaxrcAmp MaxrcLoc ] = min( abs( PowerTot - PowerAva ) );
 
 % The final answer for quadrotor perforamce parameters while in forward
 % flight. The detail shows as the following:
 % OPTFW : Optimal forward speed.
-% PORFW : The value power required.
-% MAXFW : The maximun forward speed.
-% EXCFW : The maximum excess power.  
+% PORFW :
+% MAXFW :
+% EXCFW : 
 OPTFW = Vf( PowerLoc );
 PORFW = PowerAmp;
 MAXFW = Vf( MaxrcLoc );
-EXCFW = MaxrcAmp;
+EXCFW = max( PowerExc );
 
-% Figure polt
 figure( 6 );
 h3 = plot( Vf, PowerPra, '--g', Vf, PowerPro, '--b' , Vf, PowerTot, 'r', Vf, PowerAva, 'm');
 title( ' Power Required in Forward Flight' );
@@ -122,7 +121,6 @@ xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
 
-% Figure polt
 figure( 7 );
 h4 = plot( Vf, PowerExc );
 title( ' Excess Power in Forward Flight' );
@@ -132,7 +130,6 @@ xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
 
-% Figure polt
 figure( 8 )
 plot( Vf, rad2deg( theta ) );
 title( ' Pitch Angle in Forward Flight  ' );
@@ -140,7 +137,6 @@ xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Pitch Angle (Deg.) ' );
 grid on
 
-% Figure polt
 {[ 'Opt. FW = ' num2str( round( OPTFW ) ) ' m/s ' ];
  [ 'Min. P.R = ' num2str( round( PORFW ) ) ' W   ' ];
  [ 'Max. FW = ' num2str( round( MAXFW ) ) ' m/s ' ]}

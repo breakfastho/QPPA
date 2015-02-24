@@ -16,6 +16,6 @@ FM = 0.78;
 Nu = 5e-2;
 
 [ OPTRC, PORRC, EXCRC, MAXRC ] = verticalflight( FM, Nu );
-[ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu, 2, 1, 0, 12 );
+[ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu );
 %endurance = quadendurance( PORFW ) 
 %range = quadrange( OPTFW, endurance )

@@ -1,5 +1,9 @@
 function removal = quadpitch( ForwardSpeed )
 
+% QUADPITCH
+% quadpitch( ForwardSpeed ) is a function to compute the pitch angle for
+% quadrotor while in steady forward flight. The formaula was developed in 
+% my master thesis. 
 
 global AirDensity Power Gravity TotalMass Weight RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
 
