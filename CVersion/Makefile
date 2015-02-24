@@ -4,7 +4,7 @@ LIBS = -lm
 CC   = gcc
 
 # Declare the objects which I have
-objects = main.o
+objects = main.o v1h.o
 
 #CFLAGS 
 
@@ -12,7 +12,7 @@ objects = main.o
 # gcc -o $@ $^ means specify the outfile as main main.o thankyou.o
 # The $@ is means main 
 main: ${objects}
-	${CC} -o $@ main.c ${LIBS} 
+	${CC} -o $@ ${objects} ${LIBS} 
 
 # The commmond line, "clean". Notice that, there must begin with "TAB" button.  
 # rm -f main $^ means remove forced for main main.o thankyou.o   

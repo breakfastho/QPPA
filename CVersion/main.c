@@ -1,5 +1,7 @@
-#include"main.h"
-#include<math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include "v1h.h"
 
 /*COPYRIGHT
 	Copyright (c) 2014-2015 Wei-Chieh Chang
@@ -39,8 +41,10 @@ int main(void)
 		g : Gravity
 		R : Air density
 		A : Rotor area
+		B : Rotor number
 		V : Induced velocity
 		N : Power loss rate */
+	int B;
 	float T, M, g, R, A, V, N;
 
 	M = 2.58;
@@ -49,17 +53,15 @@ int main(void)
 	T = ( M * g ) / ( 1.0 - N );
 	R = 1.125;
 	A = 0.1547*0.1547*3.14;
-	
+	B = 4;
+
 	/* Call the function to compute induced velocity */
-	V = v1h( T, R, A );
+	V = v1h( T, R, A, B );
 
 	/* Print the result */
 	printf( "The induced velocity is %f m/s \n", V );
+
+	/* Indicates the sucessful termination */
+	return 0;
 }
-/* The subfunction for induced velocity */
-float v1h( float T, float R, float A )
-{
-	float removal;
-        removal = sqrt( T / ( 2 * R * A ) );	
-	return removal;
-};
+
