@@ -4,7 +4,7 @@ LIBS = -lm
 CC   = gcc
 
 # Declare the objects which I have
-objects = main.o v1h.o
+objects = main.o v1h.o v1c.o 
 
 #CFLAGS 
 

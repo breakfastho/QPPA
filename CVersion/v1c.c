@@ -28,10 +28,11 @@
 	https://github.com/addischang1991/QPPA/tree/master/CVersion
 	Version : 1.0 at 24 Feb 2015 */ 
 
-/* The subfunction for induced velocity in hovering */
-float v1h( float T, float R, float A, int B)
+/* The subfunction for induced velocity in vertical climb */
+float v1c( float viv, float V )
 {
 	float removal;
-    removal = sqrt( T / ( 2.0 * R * A * B) );	
+	removal = -( viv / 2 ) + V; //
+	//+ sqrt(  pow( ( viv / 2 ), 2 ) + pow( V, 2 ) );
 	return removal;
-};
+}

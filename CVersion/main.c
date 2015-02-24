@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "v1h.h"
+#include "v1c.h"
 
 /*COPYRIGHT
 	Copyright (c) 2014-2015 Wei-Chieh Chang
@@ -33,7 +34,7 @@
 
 
 /* The main function is execute form here  */
-int main(void)
+int main( void )
 {
 	/* Declare the variable
 		T : Thrust
@@ -45,7 +46,7 @@ int main(void)
 		V : Induced velocity
 		N : Power loss rate */
 	int B;
-	float T, M, g, R, A, V, N;
+	float T, M, g, R, A, V, VC, N, viv;
 
 	M = 2.58;
 	g = 9.81;
@@ -54,14 +55,25 @@ int main(void)
 	R = 1.125;
 	A = 0.1547*0.1547*3.14;
 	B = 4;
+	viv = 0.25;
 
 	/* Call the function to compute induced velocity */
 	V = v1h( T, R, A, B );
 
 	/* Print the result */
-	printf( "The induced velocity is %f m/s \n", V );
+	printf( "The induced velocity is %f m/s in hovering \n", V );
+
+	/* The for-loop to compute induced velocity while in climb  */
+	int i;
+	for ( i = 0; i <= 20; ++i){
+		/* code */
+		VC = v1c( viv, V );
+		printf( "The induced velocity is %f m/s in %f climb rate \n", VC, viv );
+		viv = viv + 0.25;
+	};
+	
 
 	/* Indicates the sucessful termination */
 	return 0;
-}
+};
 
