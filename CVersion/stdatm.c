@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "v1h.h"
-#include "v1c.h"
-#include "stdatm.h"
 
 /*COPYRIGHT
 	Copyright (c) 2014-2015 Wei-Chieh Chang
@@ -33,50 +30,26 @@
 	https://github.com/addischang1991/QPPA/tree/master/CVersion
 	Version : 1.0 at 24 Feb 2015 */ 
 
-
-/* The main function is execute form here  */
-int main( void )
+float stdatm( float Height )
 {
-	/* Declare the variable
-		T : Thrust
-		M : Mass
-		g : Gravity
-		R : Air density
-		A : Rotor area
-		B : Rotor number
-		V : Induced velocity
-		N : Power loss rate */
-	int B;
-	float T, M, g, R, A, V, VC, N, viv, GG;
 
-	M = 2.58;
-	g = 9.81;
-	N = 0.05;
-	T = ( M * g ) / ( 1.0 - N );
-	R = 1.125;
-	A = 0.1547*0.1547*3.14;
-	B = 4;
-	viv = 0.25;
+	/* Declare the type as float for all variables */
+	float Gravity, Temperature, Pressure, Radious, L, M, R;
+	float Gravity_ini, Temperature_ini, Pressure_ini;
 
-	/* Call the function to compute induced velocity */
-	V = v1h( T, R, A, B );
+	/* Set up the initial value of variables */
+	Gravity_ini = 9.80665;
+	Temperature_ini = 288.15;
+	Pressure_ini = 101.325e3;
+	Radious = 6378;
+	L = 0.0065;
+	M = 0.0289644;
+	R =  8.31447;
 
-	/* Print the result */
-	printf( "The induced velocity is %10.4f m/s in hovering \n", V );
+	/* Start the main algorithm */
+	Gravity = Gravity_ini * sqrt( Radious / ( Radious + ( Height / 1000.0 ) ) );
 
-	/* The for-loop to compute induced velocity while in climb  */
-	int i;
-	GG = stdatm( 10.0 );
-	for ( i = 0; i <= 20; ++i){
-		/* code */
-		VC = v1c( viv, V );
-		
-		printf( " V1c is %6.4f m/s in %6.4f climb rate  while g = %6.4f \n", VC, viv, GG );
-		viv = viv + 0.25;
-	};
-	
+	// printf(" %f \n ", Gravity );
 
-	/* Indicates the sucessful termination */
-	return 0;
-};
-
+	return Gravity;
+} 
