@@ -46,17 +46,22 @@ int main( void )
 		B : Rotor number
 		V : Induced velocity
 		N : Power loss rate */
-	int B;
-	float T, M, g, R, A, V, VC, N, viv, GG;
+	int i, B;
+	float T, M, g, R, A, V, VC, N, RC, GG;
+	float Tava, Pava, FM;
 
+	/* Declare the value for each parameter */
 	M = 2.58;
-	g = 9.81;
 	N = 0.05;
+	g = stdatm( 0.0 );
 	T = ( M * g ) / ( 1.0 - N );
 	R = 1.125;
 	A = 0.1547*0.1547*3.14;
 	B = 4;
-	viv = 0.25;
+	RC = 0;
+	Tava = 0;
+	Pava = 180;
+	FM = 0.75;
 
 	/* Call the function to compute induced velocity */
 	V = v1h( T, R, A, B );
@@ -65,14 +70,12 @@ int main( void )
 	printf( "The induced velocity is %10.4f m/s in hovering \n", V );
 
 	/* The for-loop to compute induced velocity while in climb  */
-	int i;
-	GG = stdatm( 10.0 );
 	for ( i = 0; i <= 20; ++i){
 		/* code */
-		VC = v1c( viv, V );
-		
-		printf( " V1c is %6.4f m/s in %6.4f climb rate  while g = %6.4f \n", VC, viv, GG );
-		viv = viv + 0.25;
+		VC = v1c( RC, V );
+		Tava = FM * Pava / ( VC + RC );
+		printf( " Thrust is %8.4f  V1c is %6.4f m/s in %6.4f RC for g is %6.4f \n", Tava, VC, RC, g );
+		RC = RC + 0.25;
 	};
 	
 

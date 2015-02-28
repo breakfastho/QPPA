@@ -31,7 +31,9 @@ elseif nargin == 3
     Vc0 = 0
     Vc1 = 15;
 end  
-Vc = linspace( Vc0, Vc1, 1000 );
+
+% Declare the vertical climb rate from Vc0 to Vc1 into 500 steps.
+Vc = linspace( Vc0, Vc1, 500 );
 V1c = ( -0.5 .* Vc ) + sqrt( ( 0.5 .* Vc ).^2 + V1h^2 );
 
 % Declare the thrust required from the forces act on the quadrotor. 

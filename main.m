@@ -1,4 +1,4 @@
-clear
+clear all
 clf
 clc
 
@@ -10,12 +10,12 @@ clc
 
 
 quadparameters( 0 );
-% time2climb = quadceiling( 1000, 10000 )
+% time2climb = quadceiling( 500, 1000 )
 
-FM = 0.78;
-Nu = 5e-2;
+FM = 0.98;
+Nu = 3e-2;
 
 [ OPTRC, PORRC, EXCRC, MAXRC ] = verticalflight( FM, Nu );
-[ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu );
-%endurance = quadendurance( PORFW ) 
-%range = quadrange( OPTFW, endurance )
+[ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu, 1, 1, 0, 14 );
+% endurance = quadendurance( PORFW ) 
+% range = quadrange( OPTFW, endurance )

@@ -28,7 +28,7 @@ elseif nargin == 3
     ProMethod = 1;
 elseif nargin == 4
     Vf0 = 0;
-    Vf1 = 20;
+    Vf1 = 202;
 end    
     
 
@@ -40,7 +40,7 @@ V1h = sqrt( Weight / ( 2 * AirDensity * RotorNumber * RoterArea ) );
 
 % Declare a row data for forward speed. From Vf0 to Vf1, divid into 1000
 % steps. 
-Vf = linspace( Vf0, Vf1, 1000 );
+Vf = linspace( Vf0, Vf1, 500 );
 
 % The function quadpitch( Vf ) is a function to figure out the pitch
 % angle of the quadrotor. Notice that, just for steady flight. The
@@ -64,7 +64,7 @@ end
 % Calculate the nacessary thrust of the quadrotor which provided by
 % propeller. The equation is derived from the force diagram. The Parasite
 % drag is base on standard drag equation.
-DragParasi = 0.5 * AirDensity .* ( Vf.^2 ) .* CD1 * Sref1 .* cos( theta ) .* sin(theta);
+DragParasi = 0.5 * AirDensity .* ( Vf.^2 ) .* CD1 * Sref1 .* sin( theta );
 DragParasi2 = 0.5 * AirDensity .* ( 2*V1f + Vf .* sin( theta ) ).^2  * CD2 * Sref2; 
 ThrustReqX = DragParasi + DragParasi2 .* sin( theta );
 ThrustReqY = Weight + DragParasi2 .* cos( theta ); 
@@ -138,6 +138,14 @@ plot( Vf, rad2deg( theta ) );
 title( ' Pitch Angle in Forward Flight  ' );
 xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Pitch Angle (Deg.) ' );
+grid on
+
+% Figure polt
+figure( 8 )
+plot( Vf, ThrustReqF );
+title( ' Pitch Angle in Forward Flight  ' );
+xlabel( ' Forwrad Speed (m/s) ' );
+ylabel( ' Thrust Required (N) ' );
 grid on
 
 % Figure polt

@@ -32,7 +32,6 @@
 float v1c( float viv, float V )
 {
 	float removal;
-	removal = -( viv / 2 ) + V; //
-	//+ sqrt(  pow( ( viv / 2 ), 2 ) + pow( V, 2 ) );
+	removal = -( viv / 2 ) + sqrt( (viv/2)*(viv/2) + V*V );
 	return removal;
 }

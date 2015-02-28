@@ -14,9 +14,8 @@ function T2C = quadceiling( DesirdHeight, HeightRange )
 %     Copyright 2015 by Avionics And Flight Simulation Laboratory
 
 
-global Power TotalMass
+global Power TotalMass 
 global RoterArea RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
-global FigureCounter
 
 if nargin == 0
     DesirdHeight = 1000;
@@ -25,12 +24,11 @@ elseif nargin == 1
     HeightRange = 5000;
 end
 
-Atomdata = stdatm( linspace( 0, HeightRange, 100 ) );
+Atomdata = stdatm( linspace( 0, HeightRange, 10 ) );
 GeoHeight = Atomdata( :, 1 )';
 AirDensity = Atomdata( :, 6 )';
 Gravity = Atomdata( :, 2 )';
 Weight = TotalMass .* Gravity;
-RoterArea = pi * ( RotorRadious )^2;
 
 FM = 0.7;
 Nu = 3e-2;
@@ -44,7 +42,7 @@ V1h = sqrt( Weight ./ ( 2 .* AirDensity * RotorNumber * RoterArea ) );
 
 Vc0 = 0;
 Vc1 = 20;
-Vc = linspace( Vc0, Vc1, 500 );
+Vc = linspace( Vc0, Vc1, 100 );
 
 m = length( GeoHeight );
 n = length( Vc );
