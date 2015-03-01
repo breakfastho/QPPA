@@ -7,9 +7,6 @@ function removal = quadpitch( ForwardSpeed )
 
 global AirDensity Power Gravity TotalMass Weight RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
 
-% Determinate the drag by standard drag equation.
+% Determinate the 
 Drag = 0.5 * AirDensity .* ForwardSpeed.^2 .* CD1 * Sref1;
-
-% Pitch angle estiamtion
-pitch = asin( ( -( Weight ./ Drag ) + sqrt( ( Weight ./ Drag ).^2 + 4 ) ) ./ 2 );
-removal = pitch;
+removal = asin( ( -( Weight ./ Drag ) + sqrt( ( Weight ./ Drag ).^2 + 4 ) ) ./ 2 );

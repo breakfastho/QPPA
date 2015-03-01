@@ -1,4 +1,4 @@
-function output = quadparameters( GeoHeight )
+function removal = quadparameters( GeoHeight )
 % QUADPARAMETERS
 %     quadparameters( GeoHeight ) is a function to declare the necessary
 %     parameters for the quadrotor.
@@ -51,5 +51,4 @@ BatNumber = 2;
 BatCapity = 5.2;
 BatVoltag = 3.1 * 4;
 
-
-FigureCounter = 0;
+removal = 0;
