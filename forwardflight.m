@@ -1,4 +1,4 @@
-function removal = forwardflight( FM, Nu, Methods, ProMethod, Vf0, Vf1 )
+function [ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu, Methods, ProMethod, Vf0, Vf1 )
 % FORWARDFLIGHT
 %     forwardflight( FM, Nu, Vc0, Vc1 ) is a co-function with
 %     QUADAnalyser. The main propose of this function is to fugure out the
@@ -147,9 +147,6 @@ title( ' Pitch Angle in Forward Flight  ' );
 xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Thrust Required (N) ' );
 grid on
-
-% Return the answer.
-removal = [ OPTFW, PORFW, EXCFW, MAXFW ]; 
 
 %
 {[ 'Opt. FW = ' num2str( round( OPTFW ) ) ' m/s ' ];

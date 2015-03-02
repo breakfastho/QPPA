@@ -1,4 +1,4 @@
-function removal = verticalflight( FM, Nu, ModeThrustC ,Vc0, Vc1 )
+function [ OPTRC PORRC EXCRC MAXRC ] = verticalflight( FM, Nu, ModeThrustC ,Vc0, Vc1 )
 % VERTICALFLIGHT
 %     verticalflight( FM, Nu, ModeThrustC ,Vc0, Vc1 ) is a co-function with
 %     QUADAnalyser. The main propose of this function is to fugure out the
@@ -97,8 +97,6 @@ xlabel( ' Vertical Speed (m/s) ' );
 ylabel( ' Thrust Required (N) ' );
 legend( ' Required ', ' Avaliable ', 'Parasite Drag', ' Weight ' );
 grid on;
-
-removal = [ OPTRC, PORRC, EXCRC, MAXRC ];
 
 {[ ' Opt. R/C = ' num2str( OPTRC ) ' m/s ' ];
  [ 'Min. P.R = ' num2str( round( PORRC ) ) ' W   ' ];

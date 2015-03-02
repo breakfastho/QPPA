@@ -1,4 +1,4 @@
-function Return = quadendurance( MinimunPower )
+function removal = quadendurance( MinimunPower )
 % QUADENDURANCE
 %     endurance( MinimunPower, BatNumber, BatCapity ) is a
 %     function to figure out the maximun endurance for the quadrotor while
@@ -7,12 +7,13 @@ function Return = quadendurance( MinimunPower )
 %     endurance is in hour.
 
 % AUTHOOR INFORMACTIONS
-%     Date : 10-Feb-2015 14:40:39
+%     Date : 03-Mar-2015 02:12:24
 %     Author : Wei-Chieh Chang
 %     Degree : M. Eng. Dept. Of Aerospace Engineering Tamkang University
-%     Version : 1
+%     Version : 2
 %     Copyright 2015 by Avionics And Flight Simulation Laboratory
 
 global BatNumber BatCapity
 
-Return = BatNumber * BatCapity / MinimunPower;
+removal = BatNumber * BatCapity / MinimunPower;
+endurances = [ num2str( round( removal * 60 ) ) ' Mins' ]
