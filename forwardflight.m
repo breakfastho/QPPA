@@ -28,7 +28,7 @@ elseif nargin == 3
     ProMethod = 1;
 elseif nargin == 4
     Vf0 = 0;
-    Vf1 = 202;
+    Vf1 = 20;
 end    
     
 
@@ -92,6 +92,8 @@ end
 PowerPra = 0.5 * AirDensity * Sref1 * CD1 .* cos( theta ) .*  Vf.^3  ;  
 PowerTot = PowerPro + PowerPra;
 PowerExc = PowerAva - PowerTot;
+PowerOpr = Vf ./ PowerTot; 
+%The sepcification parameter to figure out endurance
 
 % Seek the value and the address of minimum power required, where the 
 % PowerAmp is the value and PowerLoc is the address. Using the address to 
@@ -99,7 +101,7 @@ PowerExc = PowerAva - PowerTot;
 [ PowerAmp PowerLoc ] = min( PowerTot );
 
 % Seek the valus and address for excess power. 
-[ MaxrcAmp MaxrcLoc ] = max( PowerExc );
+[ MaxrcAmp MaxrcLoc ] = min( abs( PowerExc ) );
 
 % The final answer for quadrotor perforamce parameters while in forward
 % flight. The detail shows as the following:
@@ -110,7 +112,7 @@ PowerExc = PowerAva - PowerTot;
 OPTFW = Vf( PowerLoc );
 PORFW = PowerAmp;
 MAXFW = Vf( MaxrcLoc );
-EXCFW = MaxrcAmp;
+EXCFW = Power - PowerAmp;
 
 % Figure polt
 figure( 6 );
@@ -122,31 +124,40 @@ xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
 
-% Figure polt
-figure( 7 );
-h4 = plot( Vf, PowerExc );
-title( ' Excess Power in Forward Flight' );
-legend( 'Excess' )
-set( h4, 'linewidth', 1.5 );
-xlabel( ' Forwrad Speed (m/s) ' );
-ylabel( ' Power Required (W) ' );
-grid on;
+% % Figure polt
+% figure( 7 );
+% h4 = plot( Vf, PowerExc );
+% title( ' Excess Power in Forward Flight' );
+% legend( 'Excess' )
+% set( h4, 'linewidth', 1.5 );
+% xlabel( ' Forwrad Speed (m/s) ' );
+% ylabel( ' Power Required (W) ' );
+% grid on;
+% 
+% % Figure polt
+% figure( 8 )
+% plot( Vf, rad2deg( theta ) );
+% title( ' Pitch Angle in Forward Flight  ' );
+% xlabel( ' Forwrad Speed (m/s) ' );
+% ylabel( ' Pitch Angle (Deg.) ' );
+% grid on
+% 
+% % Figure polt
+% figure( 8 )
+% plot( Vf, ThrustReqF );
+% title( ' Pitch Angle in Forward Flight  ' );
+% xlabel( ' Forwrad Speed (m/s) ' );
+% ylabel( ' Thrust Required (N) ' );
+% grid on
 
 % Figure polt
-figure( 8 )
-plot( Vf, rad2deg( theta ) );
-title( ' Pitch Angle in Forward Flight  ' );
+figure( 9 )
+plot( Vf, PowerOpr );
+title( ' Test  ' );
 xlabel( ' Forwrad Speed (m/s) ' );
-ylabel( ' Pitch Angle (Deg.) ' );
+ylabel( ' Power consuption (m/W)' );
 grid on
 
-% Figure polt
-figure( 8 )
-plot( Vf, ThrustReqF );
-title( ' Pitch Angle in Forward Flight  ' );
-xlabel( ' Forwrad Speed (m/s) ' );
-ylabel( ' Thrust Required (N) ' );
-grid on
 
 %
 {[ 'Opt. FW = ' num2str( round( OPTFW ) ) ' m/s ' ];

@@ -85,10 +85,13 @@ for i = 1: 1: m
     
 end
 
+serviceceiling = ceiling - 0.5;
+
 figure( 1 );
 plot( GeoHeight, ceiling );
 grid on ;
 title( ' Maximum Climb Rate with Takeoff Power ' )
+% legend( ' Absolute ', ' Service' )
 xlabel( ' Height (m) ' );
 ylabel( ' R/C (m/s) ' );
 

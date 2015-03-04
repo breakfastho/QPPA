@@ -2,8 +2,8 @@ clc
 clear all
 clf
 
-GeoHeight = linspace( 0, 7500, 7);
-Vf = linspace( 0, 20, 100 );
+GeoHeight = linspace( 0, 10000, 2);
+Vf = linspace( 0, 20, 50 );
 
 m = length( GeoHeight );
 n = length( Vf );
@@ -42,37 +42,38 @@ for i = 1: m
     
     % Determinate the drag by standard drag equation.
     Drag = 0.5 * AirDensity( 1, i ) .* Vf.^2 .* CD1 * Sref1;
+    
     % Pitch angle estiamtion
     theta = asin( ( -( Weight( 1, m ) ./ Drag ) ...
         + sqrt( ( Weight( 1, i ) ./ Drag ).^2 + 4 ) ) ./ 2 );
     
+    %
     V1f = sqrt( - ( Vf.^2 / 2 ) + sqrt( ( Vf.^2 / 2 ).^2 + V1h^4 ) );
     
+    %
     DragParasi = 0.5 * AirDensity( 1, i ) .* ( Vf.^2 ) .* CD1 * Sref1 .* sin( theta );
     DragParasi2 = 0.5 * AirDensity( 1, i ) .* ( 2*V1f + Vf .* sin( theta ) ).^2  * CD2 * Sref2;
     ThrustReqX = DragParasi + DragParasi2 .* sin( theta );
     ThrustReqY = Weight( 1, m ) + DragParasi2 .* cos( theta );
     ThrustReqF = sqrt( ThrustReqX.^2 + ThrustReqY.^2 );
 
+    %
     PowerAva = Power .* ones( size( Vf ) );
     PowerPro = ( ThrustReqF .* ( V1f + Vf .* sin( theta ) ) ./ FM );
     PowerPra = 0.5 * AirDensity( 1, m ) * Sref1 * CD1 .* cos( theta ) .*  Vf.^3  ;
     PowerTot = PowerPro + PowerPra;
-    PowerExc = PowerAva - PowerTot;
-    
-    [ Amp Loc ] = min( abs( PowerExc ) );
-    
-    vfmax( 1, i ) = Vf( Loc );
+
+    %
+    PowerSpe = Vf ./ PowerTot; 
+
+    %
+    plot( Vf, PowerSpe );
+    xlabel( ' Forwrad Speed (m/s) ' );
+    ylabel( ' Height ( m/W ) ' );
+    grid on
+    hold on
     
 
 end
 
-
-plot( vfmax, GeoHeight  );
-axis( [ 0 16 0 7500 ] )
-title( ' Maximum Speed in Forward Flight  ' );
-xlabel( ' Forwrad Speed (m/s) ' );
-ylabel( ' Height (m) ' );
-grid on
-hold on
 
