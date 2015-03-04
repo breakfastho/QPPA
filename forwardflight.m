@@ -124,31 +124,31 @@ xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
 
-% % Figure polt
-% figure( 7 );
-% h4 = plot( Vf, PowerExc );
-% title( ' Excess Power in Forward Flight' );
-% legend( 'Excess' )
-% set( h4, 'linewidth', 1.5 );
-% xlabel( ' Forwrad Speed (m/s) ' );
-% ylabel( ' Power Required (W) ' );
-% grid on;
-% 
-% % Figure polt
-% figure( 8 )
-% plot( Vf, rad2deg( theta ) );
-% title( ' Pitch Angle in Forward Flight  ' );
-% xlabel( ' Forwrad Speed (m/s) ' );
-% ylabel( ' Pitch Angle (Deg.) ' );
-% grid on
-% 
-% % Figure polt
-% figure( 8 )
-% plot( Vf, ThrustReqF );
-% title( ' Pitch Angle in Forward Flight  ' );
-% xlabel( ' Forwrad Speed (m/s) ' );
-% ylabel( ' Thrust Required (N) ' );
-% grid on
+% Figure polt
+figure( 7 );
+h4 = plot( Vf, PowerExc );
+title( ' Excess Power in Forward Flight' );
+legend( 'Excess' )
+set( h4, 'linewidth', 1.5 );
+xlabel( ' Forwrad Speed (m/s) ' );
+ylabel( ' Power Required (W) ' );
+grid on;
+
+% Figure polt
+figure( 8 )
+plot( Vf, rad2deg( theta ) );
+title( ' Pitch Angle in Forward Flight  ' );
+xlabel( ' Forwrad Speed (m/s) ' );
+ylabel( ' Pitch Angle (Deg.) ' );
+grid on
+
+% Figure polt
+figure( 8 )
+plot( Vf, ThrustReqF );
+title( ' Pitch Angle in Forward Flight  ' );
+xlabel( ' Forwrad Speed (m/s) ' );
+ylabel( ' Thrust Required (N) ' );
+grid on
 
 % Figure polt
 figure( 9 )
