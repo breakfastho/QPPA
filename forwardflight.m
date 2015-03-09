@@ -93,7 +93,6 @@ PowerPra = 0.5 * AirDensity * Sref1 * CD1 .* cos( theta ) .*  Vf.^3  ;
 PowerTot = PowerPro + PowerPra;
 PowerExc = PowerAva - PowerTot;
 PowerOpr = Vf ./ PowerTot; 
-%The sepcification parameter to figure out endurance
 
 % Seek the value and the address of minimum power required, where the 
 % PowerAmp is the value and PowerLoc is the address. Using the address to 
@@ -157,7 +156,6 @@ title( ' Test  ' );
 xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Power consuption (m/W)' );
 grid on
-
 
 %
 {[ 'Opt. FW = ' num2str( round( OPTFW ) ) ' m/s ' ];
