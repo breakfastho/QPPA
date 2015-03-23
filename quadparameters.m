@@ -34,7 +34,7 @@ FM = 0.8;
 Nu = 0.03;
 
 CounterFig = 1;
-CounterGeh = 1;
+% CounterGeh = 1;
 
 SizeM = size( InputHeight );
 LengM = length( InputHeight );

@@ -145,16 +145,20 @@ for i = 1: 1: LengM
     
 end
 
+
+PowerPra( CounterGeh, : )
+
 % Plot the figure 
 figure( CounterFig );
 CounterFig = CounterFig +1;
 plot( Vf, PowerPra( CounterGeh, : ), 'g',...
        Vf, PowerPro( CounterGeh, : ), 'b',...
        Vf, PowerReq( CounterGeh, : ), 'r',...
-       Vf, PowerAva, 'm');
+       Vf, PowerAva( CounterGeh, : ), 'm');
 title( { [ ' Power Required in Forward Flight ' ];
          [ ' At ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ] } );
 legend( 'Parasite', 'Propeller', 'Required', 'Avaliable')
+set( h3, 'linewidth', 1.5 );
 xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
@@ -173,8 +177,6 @@ grid on;
 figure( CounterFig );
 CounterFig = CounterFig +1;
 plot( Vf, PowerOpr( CounterGeh, : ) );
-title( { [ ' Maximum Range Forward Speed ' ];
-         [ ' At ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ] } );
 xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Power consuption (m/W)' );
 grid on

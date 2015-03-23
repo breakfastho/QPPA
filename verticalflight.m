@@ -41,7 +41,7 @@ PowerAva = Power .* ones( size( Vc ) );
 % The for-loop to compute performance parameters in different hight. 
 for i = 1: 1: LengM 
     
-    % The induced velocity in hovering.
+    % The induced velocity in hoveing, deriving from momemtum method.
     V1h( i, 1 ) = sqrt( Weight( i, 1 ) ./ ( 2 * AirDensity( i, 1 ) * RotorNumber * RoterArea ) );
 
     % The induced velocity in climb.
@@ -52,23 +52,16 @@ for i = 1: 1: LengM
     DragParasi( i, : ) = 0.5 * AirDensity( i, 1 ) * Sref1 * CD1 .* ( Vc.^2 );
     DragParasi2( i, : ) = 0.5 * AirDensity( i, 1 ) * Sref2 * CD2 .* ( ( 2 .* V1c( i, : ) ).^2 );
     
-    
     % The thrust avaliable and thrust required, you can derive it from the momentum method.
     ThrustAva( i, : ) = PowerAva ./ ( Vc + V1c( i, : ) );
     ThrustReqC( i, : ) = DragParasi( i, : ) + DragParasi2( i, : ) + Weight( i, 1 );
     
-    
     % Ther process to computing the power required for each term.    
     PowerPro( i, : ) = ThrustReqC( i, : ) .* ( V1c( i, : ) + Vc ) ./ FM ;
-
-
-
-
     PowerPra( i, : ) = DragParasi( i, : ) .* Vc ...
                         + DragParasi( i, : ) .* ( 2 * V1c( i, : ) );
     PowerReq( i, : ) = PowerPro( i, : ) + PowerPra( i, : );
     PowerExc( i, : ) = PowerAva - PowerReq( i, : );
-    
     
     % Figure out the minimum value for power required in vertical flight. But,
     % the answer must be zero. There have another algorithm to prove there will
@@ -97,7 +90,7 @@ figure( CounterFig );
 CounterFig = CounterFig +1;
 h = plot( GeoHeight, MAXRC );
 title( ' Maximun Climb Rate in Vertical Flight ' );
-set( h.CounterFig, 'linewidth', 1.9 );
+set( h, 'linewidth', 1.9 );
 xlabel( ' Vertical Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
@@ -105,14 +98,13 @@ grid on;
 % Plot the figure 
 figure( CounterFig );
 CounterFig = CounterFig +1;
-h = plot( Vc, PowerPra( CounterGeh, : ), 'g',...
-          Vc, PowerPro( CounterGeh, : ), 'b',...
-          Vc, PowerReq( CounterGeh, : ), 'r',...
-          Vc, PowerAva( CounterGeh, : ), 'm');
+plot( Vc, PowerPra( CounterGeh, : ), 'g',...
+      Vc, PowerPro( CounterGeh, : ), 'b',...
+      Vc, PowerReq( CounterGeh, : ), 'r',...
+      Vc, PowerAva, 'm' );
 title( { [ ' Power Required in Vertical Flight ' ];
          [ ' At ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ] } );
 legend( 'Parasite', 'Propeller', 'Required', 'Avaliable')
-set( h.CounterFig, 'linewidth', 1.9 );
 xlabel( ' Vertical Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;

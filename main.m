@@ -8,12 +8,13 @@ clc
 %   Education : M.Sc. of Aerospace Engineering, Tamkang University
 %     Version : 2.0
 
+global CounterGeh;
+CounterGeh = 10;
 
+ksh = quadparameters( linspace( 0, 7000, 15 ) );
 
-ksh = quadparameters( linspace( 0, 8000, 5 ) );
-
-hh = verticalflight( 0, 10 );
-%%forwardflight
+hffh = verticalflight( 0, 10 );
+hggh = forwardflight( 0.25, 18 );  
 % % 
 % % 
 % % 
