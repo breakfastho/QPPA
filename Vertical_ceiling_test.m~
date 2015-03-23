@@ -1,0 +1,80 @@
+function quadceiling = ( MaxGeoHeight, MaxRC )
+
+GeoHeight = linspace( 0, MaxGeoHeight, 10);
+Vc = linspace( 0, 20, 500 );
+
+m = length( GeoHeight );
+n = length( Vc );
+
+Atomdata = stdatm( GeoHeight );
+AirDensity = Atomdata( :, 6 )';
+Gravity = Atomdata( :, 2 )';
+
+FM = 0.75;
+
+TotalMass = 1.8;
+Weight = Gravity .* TotalMass;
+Power = 180;
+
+% The properties for propeller.
+RotorNumber = 4;
+RotorRadious = 0.1547;
+RoterArea = pi * RotorRadious^2;
+
+Sref1 = 46e-3;
+Sref2 = Sref1 - 60e-4;
+CD1 = 0.98;
+CD2 = 0.48;
+
+BatNumber = 2;
+BatCapity = 5.2;
+BatVoltag = 3.1 * 4;
+
+Vcmax = zeros( 1, m );
+
+for i = 1: m
+    
+    
+    % The induced velocity in hoveing, deriving from momemtum method.
+    V1h( 1, i ) = sqrt( Weight( 1, i ) ./ ( 2 * AirDensity( 1, i ) * RotorNumber * RoterArea ) );
+    
+    
+    
+    % Declare the vertical climb rate from Vc0 to Vc1 into 500 steps.
+    V1c = ( -0.5 .* Vc ) + sqrt( ( 0.5 .* Vc ).^2 + V1h( 1, i )^2 );
+    
+    % Declare the thrust required from the forces act on the quadrotor.
+    % The thrust have to elimiate drag, wake drag and weight. \
+    DragParasi = 0.5 .* AirDensity( 1, i ) * Sref1 * CD1 .* ( Vc.^2 );
+    DragParasi2 = 0.5 .* AirDensity( 1, i ) * Sref2 * CD2 .* ( ( 2 .* V1c ).^2 );
+    
+    ThrustReqC = DragParasi + DragParasi2 + Weight( 1, i );
+    
+    
+    % Ther process to computing the power required for each term.
+    PowerAva = Power * ones( size( Vc ) );
+    PowerPro = ( ThrustReqC .* ( V1c + Vc ) ./ FM );
+    PowerPra = DragParasi .* Vc + DragParasi .* ( 2 * V1c );
+    PowerTot = PowerPro + PowerPra;
+    PowerExc = PowerAva - PowerTot;
+    
+        if(PowerExc( 1 )<=0)
+        Vcmax( 1, i ) = 0;
+    else
+        [ a b ] = min( abs( PowerExc ) );
+        Vcmax( 1, i ) = Vc(b);
+    end
+    
+end
+
+plot( GeoHeight, Vcmax )
+
+%
+% plot( vfmax, GeoHeight  );
+% axis( [ 0 16 0 7500 ] )
+% title( ' Maximum Speed in Forward Flight  ' );
+% xlabel( ' Forwrad Speed (m/s) ' );
+% ylabel( ' Height (m) ' );
+% grid on
+% hold on
+%

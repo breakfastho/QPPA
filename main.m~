@@ -3,17 +3,20 @@ clf
 clc
 
 % AUTHOOR INFORMACTIONS
-%        Date : 23-Mar-2015 23:56:33
+%        Date : 10-Feb-2015 14:40:39
 %      Author : Wei-Chieh Chang
 %   Education : M.Sc. of Aerospace Engineering, Tamkang University
 %     Version : 2.0
 
 
 
-ksh = quadparameters( linspace( 0, 8000, 5 ) );
+ksh = quadparameters( 1000 );
+time2climb = quadceiling( 3000, 5000 )
 
-hh = verticalflight( 0, 10 );
-%%forwardflight
+
+% % 
+% % [ OPTRC, PORRC, EXCRC, MAXRC ] = verticalflight( FM, Nu );
+% % [ V1h, OPTFW, OPRFW ,PORFW, POPRFW, MAXFW ] = forwardflight( FM, Nu, 1, 1, 0, 18 );
 % % 
 % % 
 % % 

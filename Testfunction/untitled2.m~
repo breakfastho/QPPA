@@ -2,8 +2,8 @@ clc
 clear all
 clf
 
-GeoHeight = linspace( 0, 12000, 6 );
-Vf = linspace( 0.5, 25, 30 );
+GeoHeight = linspace( 0, 10000, 5 );
+Vf = linspace( 0, 20, 100 );
 
 m = length( GeoHeight );
 n = length( Vf );
@@ -16,7 +16,7 @@ FM = 0.75;
 
 TotalMass = 1.8;
 Weight = Gravity .* TotalMass;
-Power = 250;
+Power = 4*180;
 
 % The properties for propeller.
 RotorNumber = 4;
@@ -32,7 +32,7 @@ BatNumber = 2;
 BatCapity = 5.2;
 BatVoltag = 3.1 * 4;
 
-Vfmax = zeros( 1, m );
+vfmax = zeros( 1, m );
 
 for i = 1: m
     
@@ -65,7 +65,7 @@ for i = 1: m
 % %     hold on
 
     
-    if(PowerExc( 1, 1 )<=0)
+    if(PowerExc<=0)
         Vfmax( 1, i ) = 0;
     else
         [ a b ] = min( abs( PowerExc ) );

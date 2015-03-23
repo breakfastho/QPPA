@@ -1,33 +1,26 @@
-function [ OPTFW, PORFW, EXCFW, MAXFW ] = forwardflight( FM, Nu, Methods, ProMethod, Vf0, Vf1 )
+function removal = forwardflight( Vf0, Vf1 )
 % FORWARDFLIGHT
-%     forwardflight( FM, Nu, Vc0, Vc1 ) is a co-function with
-%     QUADAnalyser. The main propose of this function is to fugure out the
+%     forwardflight( Vc0, Vc1 ) is a co-function with QUADAnalyser. The main 
+%     propose of this function is to fugure out the
 %     minimum power, minimun power required R/C and maximun R/C in the
 %     specified condition. In this functtion, you have to input the 
 
 
 % AUTHOOR INFORMACTIONS
-%     Date : 24-Feb-2015 16:34:45
+%     Date : 10-Mar-2015 00:43:38
 %     Author : Wei-Chieh Chang
 %     Degree : M. Eng. Dept. Of Aerospace Engineering Tamkang University
-%     Version : 4.0
+%     Version : 4.1
 %     Copyright 2015 by Avionics And Flight Simulation Laboratory
 
 
 global AirDensity Power Gravity TotalMass Weight 
 global RoterArea RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
 
-if nargin == 2
+if nargin == 0
     Vf0 = 0;
     Vf1 = 20;
-    Methods = 1;
-    ProMethod = 1;
-elseif nargin == 3
-    Vf0 = 0;
-    Vf1 = 10;
-    ProMethod = 1;
-elseif nargin == 4
-    Vf0 = 0;
+elseif nargin == 1
     Vf1 = 20;
 end    
     
@@ -61,6 +54,14 @@ elseif Methods == 3
     V1f = ( V1h^2 ) ./ Vf;
 end
 
+% Ther process to computing the power required for each term. The power
+% avaliable is derived from the momentum method. With the forward speed 
+% increase, the thrust avaliable will decrease. The propeller power is the 
+% power which dispat at propeller, the parasite is the power to elimiate the 
+% drag. Thus, the total power is the summation of propeller and parasite
+% power. Notice that, the power avaliable will be a constant. 
+PowerAva = Power * ones( size( Vf ) );
+
 % Calculate the nacessary thrust of the quadrotor which provided by
 % propeller. The equation is derived from the force diagram. The Parasite
 % drag is base on standard drag equation.
@@ -69,14 +70,8 @@ DragParasi2 = 0.5 * AirDensity .* ( 2*V1f + Vf .* sin( theta ) ).^2  * CD2 * Sre
 ThrustReqX = DragParasi + DragParasi2 .* sin( theta );
 ThrustReqY = Weight + DragParasi2 .* cos( theta ); 
 ThrustReqF = sqrt( ThrustReqX.^2 + ThrustReqY.^2 );
-       
-% Ther process to computing the power required for each term. The power
-% avaliable is derived from the momentum method. With the forward speed 
-% increase, the thrust avaliable will decrease. The propeller power is the 
-% power which dispat at propeller, the parasite is the power to elimiate the 
-% drag. Thus, the total power is the summation of propeller and parasite
-% power. Notice that, the power avaliable will be a constant. 
-PowerAva = Power * ones( size( Vf ) );
+ThrustAvaF = FM .* PowerAva ./ ( V1f + Vf .* sin( theta ) );
+ThrustExcF = ThrustAvaF - ThrustReqF;
 
 % Here are algorithms with different view.
 if ProMethod == 1 
@@ -99,17 +94,22 @@ PowerOpr = Vf ./ PowerTot;
 % compare where the corresponding velocity is.  
 [ PowerAmp PowerLoc ] = min( PowerTot );
 
+[ OprAmp OprLoc ] = max( PowerOpr );
+
 % Seek the valus and address for excess power. 
 [ MaxrcAmp MaxrcLoc ] = min( abs( PowerExc ) );
 
 % The final answer for quadrotor perforamce parameters while in forward
 % flight. The detail shows as the following:
-% OPTFW : Optimal forward speed.
+% OPTFW : Optimal forward speed for minimum power.
+% OPRFW : Optimal forward speed for maximum range.
 % PORFW : The value power required.
 % MAXFW : The maximun forward speed.
 % EXCFW : The maximum excess power.  
 OPTFW = Vf( PowerLoc );
+OPRFW = Vf( OprLoc );
 PORFW = PowerAmp;
+POPRFW = OprAmp;
 MAXFW = Vf( MaxrcLoc );
 EXCFW = Power - PowerAmp;
 
@@ -144,21 +144,29 @@ grid on
 % Figure polt
 figure( 8 )
 plot( Vf, ThrustReqF );
-title( ' Pitch Angle in Forward Flight  ' );
+title( ' Thrust Required in Forward Flight  ' );
 xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Thrust Required (N) ' );
 grid on
 
 % Figure polt
 figure( 9 )
+plot( Vf, ThrustAvaF, '--r', Vf, ThrustExcF );
+title( ' Thrust Ava in Forward Flight  ' );
+xlabel( ' Forwrad Speed (m/s) ' );
+ylabel( ' Thrust Required (N) ' );
+grid on
+
+% Figure polt
+figure( 10 )
 plot( Vf, PowerOpr );
-title( ' Test  ' );
 xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Power consuption (m/W)' );
 grid on
-
+hold on
 %
 {[ 'Opt. FW = ' num2str( round( OPTFW ) ) ' m/s ' ];
+ [ 'Opr. FW = ' num2str( round( OPRFW ) ) ' m/s ' ];   
  [ 'Min. P.R = ' num2str( round( PORFW ) ) ' W   ' ];
  [ 'Max. FW = ' num2str( round( MAXFW ) ) ' m/s ' ]}
 

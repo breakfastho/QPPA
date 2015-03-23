@@ -17,10 +17,9 @@ global FM Nu SizeM LengM CounterFig CounterGeh
 global GeoHeight AirDensity Power Gravity TotalMass Weight 
 global RoterArea RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
 
-% This is a statement to judge the number of input data. If there without 
-% any input augment, then the initial and final value of climb velocity will 
-% be defult. Else if there have one input data, then we just define the final
-% value of climb velocity.
+% Declare the climb velocity form Vc0 to Vc1, using linspce to divid into
+% 1000 steps. And the V1c, induced velocity in vertical climb, is derived 
+% form momentum method. You may check the paper formar from my thesis.
 if nargin == 0
     Vc0 = 0;
     Vc1 = 15;

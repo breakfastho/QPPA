@@ -25,16 +25,10 @@ function removal = quadparameters( InputHeight )
 %            CD1 : Drag coefficient of Sref1 
 %            CD2 : Drag coefficient of Sref2
 
-global FM Nu SizeM LengM CounterFig CounterGeh
+global FM Nu SizeM LengM
 global GeoHeight AirDensity Power Gravity TotalMass Weight 
 global RoterArea RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
 global BatNumber BatCapity BatVoltag
-
-FM = 0.8;
-Nu = 0.03;
-
-CounterFig = 1;
-CounterGeh = 1;
 
 SizeM = size( InputHeight );
 LengM = length( InputHeight );

@@ -12,7 +12,7 @@ RoterArea = pi * RotorRadious^2;
 
 
 Sref1 = 46e-3;
-Sref2 = Sref1 - 60e-4;
+Sref2 = 60e-3;
 CD1 = 0.98;
 CD2 = 0.48;
 
@@ -21,7 +21,7 @@ BatCapity = 5.2;
 BatVoltag = 3.1 * 4;
 
 
-x = linspace( 0, 20, 10 ) ;
+x = linspace( 0, 25, 10 ) ;
 y = linspace( 0.01, 0.5, 10 ) ;
 
 [ Vf, theta ] = meshgrid( x, y );
