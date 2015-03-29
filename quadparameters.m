@@ -63,4 +63,8 @@ BatNumber = 2;
 BatCapity = 5.2;
 BatVoltag = 3.1 * 4;
 
+parameter = ...
+[ 'At         ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ]
+
+
 removal = [ GeoHeight Gravity AirDensity ];

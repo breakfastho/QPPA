@@ -9,15 +9,12 @@ clc
 %     Version : 2.0
 
 global CounterGeh;
-CounterGeh = 10;
+CounterGeh = 4;
 
-ksh = quadparameters( linspace( 0, 7000, 15 ) );
+k1 = quadparameters( linspace( 0, 5000, 4 ) );
+k2 = verticalflight( 0, 10 );
+[ PORFW OPRFW POPRFW ] = forwardflight( 0.25, 15 );  
 
-hffh = verticalflight( 0, 10 );
-hggh = forwardflight( 0.25, 18 );  
-% % 
-% % 
-% % 
-% % % % Compute the forward parameters for quadrotor.
-% % endurance = quadendurance( PORFW );
-% % range = quadrange( OPRFW, POPRFW );
+% Compute the forward parameters for quadrotor.
+endurance = quadendurance( PORFW );
+range = quadrange( OPRFW, POPRFW );

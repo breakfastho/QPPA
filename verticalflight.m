@@ -109,6 +109,11 @@ xlabel( ' Vertical Speed (m/s) ' );
 ylabel( ' Power Required (W) ' );
 grid on;
 
+parameter = ...
+{[ 'Opt. R/C = ' num2str( round( OPTRC( CounterGeh, 1 ) ) ) ' m/s ' ];
+ [ 'Min. P.R = ' num2str( round( PORRC( CounterGeh, 1 ) ) ) ' W   ' ];
+ [ 'Max. R/C = ' num2str( round( MAXRC( CounterGeh, 1 ) ) ) ' m/s ' ]}
+
 removal = 0;
 % 
 % figure( 4 )
@@ -129,7 +134,5 @@ removal = 0;
 % legend( ' Required ', ' Avaliable ', 'Parasite Drag', ' Weight ' );
 % grid on;
 % 
-% {[ ' Opt. R/C = ' num2str( OPTRC ) ' m/s ' ];
-%  [ 'Min. P.R = ' num2str( round( PORRC ) ) ' W   ' ];
-%  [ 'Max. R/C = ' num2str( round( MAXRC ) ) ' m/s ' ]}
+
 

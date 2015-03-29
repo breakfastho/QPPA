@@ -1,4 +1,4 @@
-function removal = forwardflight( Vf0, Vf1 )
+function [ aa bb cc ] = forwardflight( Vf0, Vf1 )
 % FORWARDFLIGHT
 %     forwardflight( Vc0, Vc1 ) is a co-function with QUADAnalyser. The main 
 %     propose of this function is to fugure out the
@@ -179,38 +179,77 @@ xlabel( ' Forwrad Speed (m/s) ' );
 ylabel( ' Power consuption (m/W)' );
 grid on
 
-removal = 0;
-% 
-% % Figure polt
-% figure( 8 )
-% plot( Vf, rad2deg( theta ) );
-% title( ' Pitch Angle in Forward Flight  ' );
-% xlabel( ' Forwrad Speed (m/s) ' );
-% ylabel( ' Pitch Angle (Deg.) ' );
-% grid on
-% 
-% % Figure polt
-% figure( 8 )
-% plot( Vf, ThrustReqF );
-% title( ' Thrust Required in Forward Flight  ' );
-% xlabel( ' Forwrad Speed (m/s) ' );
-% ylabel( ' Thrust Required (N) ' );
-% grid on
-% 
-% % Figure polt
-% figure( 9 )
-% plot( Vf, ThrustAvaF, '--r', Vf, ThrustExcF );
-% title( ' Thrust Ava in Forward Flight  ' );
-% xlabel( ' Forwrad Speed (m/s) ' );
-% ylabel( ' Thrust Required (N) ' );
-% grid on
-% 
-% % Figure polt
-% figure( 10 )
+% Plot the figure 
+figure( CounterFig );
+CounterFig = CounterFig +1;
+plot( Vf, rad2deg( theta( CounterGeh, : ) ) );
+title( ' Pitch Angle in Forward Flight  ' );
+xlabel( ' Forwrad Speed (m/s) ' );
+ylabel( ' Pitch Angle (Deg.) ' );
+grid on
 
-% %
-% {[ 'Opt. FW = ' num2str( round( OPTFW ) ) ' m/s ' ];
-%  [ 'Opr. FW = ' num2str( round( OPRFW ) ) ' m/s ' ];   
-%  [ 'Min. P.R = ' num2str( round( PORFW ) ) ' W   ' ];
-%  [ 'Max. FW = ' num2str( round( MAXFW ) ) ' m/s ' ]}
+% Plot the figure 
+figure( CounterFig );
+CounterFig = CounterFig +1;
+plot( MAXFW, GeoHeight );
+title( ' Flight Envolope in Forward Flight ' );
+xlabel( ' Maximum Forwrad Speed (m/s) ' );
+ylabel( ' Height (m) ' );
+grid on
+
+% Plot the figure 
+figure( CounterFig );
+CounterFig = CounterFig +1;
+plot( Vf, PowerReq );
+title( ' Power Required in Different Height' );
+xlabel( ' Maximum Forwrad Speed (m/s) ' );
+ylabel( ' Height (m) ' );
+grid on
+
+% Plot the figure 
+figure( CounterFig );
+CounterFig = CounterFig +1;
+plot( Vf, theta );
+title( ' Power Required in Different Height' );
+xlabel( ' Maximum Forwrad Speed (m/s) ' );
+ylabel( ' Height (m) ' );
+grid on
+
+aa = PORFW( CounterGeh, 1 ); 
+bb = OPRFW( CounterGeh, 1 ); 
+cc = POPRFW( CounterGeh, 1 );
+
+
+% Plot the figure 
+figure( CounterFig );
+CounterFig = CounterFig +1;
+plot( Vf, PowerPra( CounterGeh-3, : ), '--r',...
+       Vf, PowerPro( CounterGeh-3, : ), '-.r',...
+       Vf, PowerReq( CounterGeh-3, : ), 'r' )
+title( { [ ' Power Required in Forward Flight ' ];
+         [ ' At ' num2str( GeoHeight( CounterGeh-3, 1 ) ) ' m height ' ] } );
+legend( 'Parasite', 'Propeller', 'Required', 'Avaliable')
+xlabel( ' Forwrad Speed (m/s) ' );
+ylabel( ' Power Required (W) ' );
+grid on;
+hold on
+plot( Vf, PowerPra( CounterGeh, : ), '--g',...
+       Vf, PowerPro( CounterGeh, : ), '-.g',...
+       Vf, PowerReq( CounterGeh, : ), 'g' )
+title( { [ ' Power Required in Forward Flight ' ];
+         [ ' At ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ] } );
+legend( 'Parasite', 'Propeller', 'Required', 'Avaliable')
+xlabel( ' Forwrad Speed (m/s) ' );
+ylabel( ' Power Required (W) ' );
+grid on;
+
+
+parameter = ...
+{[ 'Opt. FW  = ' num2str( round( OPTFW( CounterGeh, 1 ) ) ) ' m/s ' ];
+ [ 'Opr. FW  = ' num2str( round( OPRFW( CounterGeh, 1 ) ) ) ' m/s ' ];   
+ [ 'Min. P.R = ' num2str( round( PORFW( CounterGeh, 1 ) ) ) ' W   ' ];
+ [ 'Max. FW  = ' num2str( round( MAXFW( CounterGeh, 1 ) ) ) ' m/s ' ]}
+
+
+
 
