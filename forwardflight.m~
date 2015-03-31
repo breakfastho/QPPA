@@ -14,7 +14,7 @@ function [ aa bb cc ] = forwardflight( Vf0, Vf1 )
 %     Copyright 2015 by Avionics And Flight Simulation Laboratory
 
 
-global FM Nu SizeM LengM CounterFig CounterGeh
+global FM Nu SizeM LengM CounterFig CounterGeh DividorGeh
 global GeoHeight AirDensity Power Gravity TotalMass Weight 
 global RoterArea RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
 
@@ -56,20 +56,24 @@ for i = 1: 1: LengM
     
     % Pitch angle estiamtion, if you want know more detail, please check my
     % master thesis. There have more dissucss.
-    theta( i, : ) = asin( ( -TremPitch( i, : ) + sqrt( 4 + TremPitch( i, : ).^2 ) ) ./ 2 );
-    
+    pitchmethod = 2;
+    if pitchmethod == 1
+        theta( i, : ) = asin( ( -TremPitch( i, : ) + sqrt( 4 + TremPitch( i, : ).^2 ) ) ./ 2 );
+    elseif pitchmethod == 2
+        theta( i, : ) = 0.05 .* ones( size( Vf ) );
+    end
     % Here have three methods to figure out the induced velocity at propeller,
     % first method is based on my theory, but it still need be approved by my
     % thesis advisor. The second is to calculate the induced veloctity on
     % helicopter. The equation is exact solution. The third is an approximation
     % solution.
-    Methods = 1;
+    Methods = 2;
     if Methods == 1
-        V1f( i, : ) = sqrt( - ( Vf.^2 / 2 ) + ...
-                        sqrt( ( Vf.^2 / 2 ).^2 + V1h( i, 1 )^4 ) );
-    elseif Methods == 2
         V1f( i, : ) = -0.5 .* Vf .* sin( theta( i, : ) ) + ...
                         sqrt( ( 0.5 .* Vf .* sin( theta( i, : ) ) ).^2 + V1h( i, 1 )^2 );
+    elseif Methods == 2
+         V1f( i, : ) = sqrt( - ( Vf.^2 / 2 ) + ...
+                        sqrt( ( Vf.^2 / 2 ).^2 + V1h( i, 1 )^4 ) );
     elseif Methods == 3
         V1f( i, : ) = ( V1h^2 ) ./ Vf;
     end
@@ -78,7 +82,7 @@ for i = 1: 1: LengM
     % propeller. The equation is derived from the force diagram. The Parasite
     % drag is base on standard drag equation.
     DragParasi( i, : ) = 0.5 * AirDensity( i, 1 ) .* ( Vf.^2 ) ...
-                            .* CD1 * Sref1 .* sin( theta( i, : ) );
+                            .* CD1 * Sref1 .* cos( theta( i, : ) );
     DragParasi2( i, : ) = 0.5 * AirDensity( i, 1 ) .* ( 2 .* V1f( i, : ) +...
                             Vf .* sin( theta( i, : ) ) ).^2  * CD2 * Sref2;
                         
@@ -144,68 +148,156 @@ for i = 1: 1: LengM
     end
     
 end
+plot( Vf, ThrustReqX( CounterGeh, : )
+% % Plot the figure 
+% figure( CounterFig );
+% CounterFig = CounterFig +1;
+% plot( Vf, ThrustReqX( CounterGeh, : ), 'g',...
+%        Vf, ThrustReqY( CounterGeh, : ), 'b',...
+%        Vf, ThrustReqF( CounterGeh, : ), 'r' );
+% title( { [ ' Thrust Required in Forward Flight ' ];
+%          [ ' At ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ] } );
+% legend( 'X-Axis', 'Y-Axis', 'Required' );
+% xlabel( ' Forwrad Speed (m/s) ' );
+% ylabel( ' Thrust Required (N) ' );
+% axis( [ Vf0 Vf1 0 1.2*ThrustReqF( 1, 1 ) ] );
+% grid on;
 
+
+% % Plot the figure 
+% figure( CounterFig );
+% CounterFig = CounterFig +1;
+% plot( Vf, ThrustReqX( CounterGeh+2, : ), 'g',...
+%        Vf, ThrustReqY( CounterGeh+2, : ), 'b',...
+%        Vf, ThrustReqF( CounterGeh+2, : ), 'r' );
+% title( { [ ' Thrust Required in Forward Flight ' ];
+%          [ ' At ' num2str( GeoHeight( CounterGeh+2, 1 ) ) ' m height ' ] } );
+% legend( 'X-Axis', 'Y-Axis', 'Required' );
+% xlabel( ' Forwrad Speed (m/s) ' );
+% ylabel( ' Thrust Required (N) ' );
+% axis( [ Vf0 Vf1 0 1.2*ThrustReqF( 1, 1 ) ] );
+% grid on;
+
+
+% % Plot the figure 
+% figure( CounterFig );
+% CounterFig = CounterFig +1;
+% plot( Vf, PowerPra( CounterGeh, : ), 'g',...
+%        Vf, PowerPro( CounterGeh, : ), 'b',...
+%        Vf, PowerReq( CounterGeh, : ), 'r',...
+%        Vf, PowerAva, 'm');
+% title( { [ ' Power Required in Forward Flight ' ];
+%          [ ' At ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ] } );
+% legend( 'Parasite', 'Propeller', 'Required', 'Avaliable')
+% xlabel( ' Forwrad Speed (m/s) ' );
+% ylabel( ' Power Required (W) ' );
+% grid on;
+
+
+% % Plot the figure 
+% figure( CounterFig );
+% CounterFig = CounterFig +1;
+% plot( Vf, PowerExc( CounterGeh, : ) );
+% title( { [ ' Excess Power in Forward Flight ' ];
+%          [ ' At ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ] } );
+% xlabel( ' Forwrad Speed (m/s) ' );
+% ylabel( ' Power Required (W) ' );
+% grid on;
+
+
+% % Plot the figure 
+% figure( CounterFig );
+% CounterFig = CounterFig +1;
+% plot( Vf, PowerOpr( CounterGeh, : ) );
+% title( { [ ' Maximum Range Forward Speed ' ];
+%          [ ' At ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ] } );
+% xlabel( ' Forwrad Speed (m/s) ' );
+% ylabel( ' Power consuption (m/W)' );
+% grid on
+
+
+% % Plot the figure 
+% figure( CounterFig );
+% CounterFig = CounterFig +1;
+% plot( Vf, rad2deg( theta( CounterGeh, : ) ) );
+% title( ' Pitch Angle in Forward Flight  ' );
+% xlabel( ' Forwrad Speed (m/s) ' );
+% ylabel( ' Pitch Angle (Deg.) ' );
+% grid on
+% 
 % Plot the figure 
 figure( CounterFig );
 CounterFig = CounterFig +1;
-plot( Vf, PowerPra( CounterGeh, : ), 'g',...
-       Vf, PowerPro( CounterGeh, : ), 'b',...
-       Vf, PowerReq( CounterGeh, : ), 'r',...
-       Vf, PowerAva, 'm');
-title( { [ ' Power Required in Forward Flight ' ];
-         [ ' At ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ] } );
-legend( 'Parasite', 'Propeller', 'Required', 'Avaliable')
-xlabel( ' Forwrad Speed (m/s) ' );
-ylabel( ' Power Required (W) ' );
-grid on;
-
-% Plot the figure 
-figure( CounterFig );
-CounterFig = CounterFig +1;
-plot( Vf, PowerExc( CounterGeh, : ) );
-title( { [ ' Excess Power in Forward Flight ' ];
-         [ ' At ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ] } );
-xlabel( ' Forwrad Speed (m/s) ' );
-ylabel( ' Power Required (W) ' );
-grid on;
-
-% Plot the figure 
-figure( CounterFig );
-CounterFig = CounterFig +1;
-plot( Vf, PowerOpr( CounterGeh, : ) );
-title( { [ ' Maximum Range Forward Speed ' ];
-         [ ' At ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ] } );
-xlabel( ' Forwrad Speed (m/s) ' );
-ylabel( ' Power consuption (m/W)' );
+plot( MAXFW, GeoHeight );
+title( ' Flight Envolope in Forward Flight ' );
+xlabel( ' Maximum Forwrad Speed (m/s) ' );
+ylabel( ' Height (m) ' );
 grid on
-
+% 
 % Plot the figure 
 figure( CounterFig );
 CounterFig = CounterFig +1;
-plot( Vf, rad2deg( theta( CounterGeh, : ) ) );
-title( ' Pitch Angle in Forward Flight  ' );
-xlabel( ' Forwrad Speed (m/s) ' );
-ylabel( ' Pitch Angle (Deg.) ' );
+plot( Vf, ThrustReqF );
+title( ' Thrust Required in Different Height' );
+xlabel( ' Maximum Forwrad Speed (m/s) ' );
+ylabel( ' Thrust(N) ' );
 grid on
-
+% 
 % Plot the figure 
 figure( CounterFig );
 CounterFig = CounterFig +1;
-plot( Vfm, rad2deg( theta( CounterGeh, : ) ) );
-title( ' Pitch Angle in Forward Flight  ' );
-xlabel( ' Forwrad Speed (m/s) ' );
-ylabel( ' Pitch Angle (Deg.) ' );
+plot( Vf, PowerPra );
+title( ' Propeller Power Required in Different Height' );
+xlabel( ' Maximum Forwrad Speed (m/s) ' );
+ylabel( ' Power(W) ' );
 grid on
+% 
+% % Plot the figure 
+% figure( CounterFig );
+% CounterFig = CounterFig +1;
+% plot( Vf, theta );
+% title( ' Power Required in Different Height' );
+% xlabel( ' Maximum Forwrad Speed (m/s) ' );
+% ylabel( ' Height (m) ' );
+% grid on
+% 
+% % Plot the figure 
+% figure( CounterFig );
+% CounterFig = CounterFig +1;
+% plot( Vf, PowerPra( CounterGeh-3, : ), '--r',...
+%        Vf, PowerPro( CounterGeh-3, : ), '-.r',...
+%        Vf, PowerReq( CounterGeh-3, : ), 'r' )
+% title( { [ ' Power Required in Forward Flight ' ];
+%          [ ' At ' num2str( GeoHeight( CounterGeh-3, 1 ) ) ' m height ' ] } );
+% legend( 'Parasite', 'Propeller', 'Required')
+% xlabel( ' Forwrad Speed (m/s) ' );
+% ylabel( ' Power Required (W) ' );
+% grid on;
+% hold on
+% plot( Vf, PowerPra( CounterGeh, : ), '--g',...
+%        Vf, PowerPro( CounterGeh, : ), '-.g',...
+%        Vf, PowerReq( CounterGeh, : ), 'g' )
+% title( { [ ' Power Required in Forward Flight ' ];
+%          [ ' At ' num2str( GeoHeight( CounterGeh, 1 ) ) ' m height ' ] } );
+% legend( 'Parasite', 'Propeller', 'Required', 'Avaliable')
+% xlabel( ' Forwrad Speed (m/s) ' );
+% ylabel( ' Power Required (W) ' );
+% grid on;
 
-aa = PORFW( CounterGeh, 1 ); 
-bb = OPRFW( CounterGeh, 1 ); 
-cc = POPRFW( CounterGeh, 1 );
+% 
+% parameter = ...
+% {[ 'Opt. FW  = ' num2str( round( OPTFW( CounterGeh, 1 ) ) ) ' m/s ' ];
+%  [ 'Opr. FW  = ' num2str( round( OPRFW( CounterGeh, 1 ) ) ) ' m/s ' ];   
+%  [ 'Min. P.R = ' num2str( round( PORFW( CounterGeh, 1 ) ) ) ' W   ' ];
+%  [ 'Max. FW  = ' num2str( round( MAXFW( CounterGeh, 1 ) ) ) ' m/s ' ]}
 
-parameter = ...
-{[ 'Opt. FW  = ' num2str( round( OPTFW( CounterGeh, 1 ) ) ) ' m/s ' ];
- [ 'Opr. FW  = ' num2str( round( OPRFW( CounterGeh, 1 ) ) ) ' m/s ' ];   
- [ 'Min. P.R = ' num2str( round( PORFW( CounterGeh, 1 ) ) ) ' W   ' ];
- [ 'Max. FW  = ' num2str( round( MAXFW( CounterGeh, 1 ) ) ) ' m/s ' ]}
+% aa = PORFW( CounterGeh, 1 ); 
+% bb = OPRFW( CounterGeh, 1 ); 
+% cc = POPRFW( CounterGeh, 1 );
+
+aa = 0;
+bb = 0;
+cc = 0;
 
 
 

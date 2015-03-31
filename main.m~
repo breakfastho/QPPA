@@ -1,5 +1,4 @@
-clear
-clf
+clear all
 clc
 
 % AUTHOOR INFORMACTIONS
@@ -8,16 +7,13 @@ clc
 %   Education : M.Sc. of Aerospace Engineering, Tamkang University
 %     Version : 2.0
 
-global CounterGeh;
-CounterGeh = 4;
+global CounterGeh DividorGeh;
+CounterGeh = 1;
+DividorGeh = 3;
+k1 = quadparameters( linspace( 0, 5000, DividorGeh ) );
+%k2 = verticalflight( 0, 10 );
+[ PORFW OPRFW POPRFW ] = forwardflight( 5, 15 );  
 
-ksh = quadparameters( linspace( 0, 7000, 5 ) );
-
-hffh = verticalflight( 0, 10 );
-hggh = forwardflight( 0.25, 18 );  
-% % 
-% % 
-% % 
-% % % % Compute the forward parameters for quadrotor.
-% % endurance = quadendurance( PORFW );
-% % range = quadrange( OPRFW, POPRFW );
+% Compute the forward parameters for quadrotor.
+%endurance = quadendurance( PORFW );
+%range = quadrange( OPRFW, POPRFW );

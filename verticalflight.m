@@ -13,7 +13,7 @@ function removal = verticalflight( Vc0, Vc1 )
 %     Version : 1
 %     Copyright 2015 by Avionics And Flight Simulation Laboratory
 
-global FM Nu SizeM LengM CounterFig CounterGeh
+global FM Nu SizeM LengM CounterFig CounterGeh DividorGeh
 global GeoHeight AirDensity Power Gravity TotalMass Weight 
 global RoterArea RotorNumber RotorRadious Sref1 Sref2 CD1 CD2
 
